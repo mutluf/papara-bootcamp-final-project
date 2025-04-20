@@ -1,0 +1,6 @@
+@DualPay.API_HostAddress = http://localhost:5084
+
+GET {{DualPay.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

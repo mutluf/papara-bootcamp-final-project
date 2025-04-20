@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{00E3985D-289E-4AFE-BDA4-66204FFBD0AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{247C0234-7D09-40DC-84F4-84EF6DD588F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{994D4A0C-29B2-4D86-8BB3-EA288C0B03B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DualPay.Domain", "Core\DualPay.Domain\DualPay.Domain.csproj", "{082936DD-139B-4FA9-B474-36C1767C8A17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DualPay.Application", "Core\DualPay.Application\DualPay.Application.csproj", "{B170827B-8F4A-40FA-A841-D50648728BDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DualPay.Infrastructure", "Infrastructure\DualPay.Infrastructure\DualPay.Infrastructure.csproj", "{481B255D-0743-41AC-9AB3-D7D6D61E1B96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DualPay.Persistence", "Infrastructure\DualPay.Persistence\DualPay.Persistence.csproj", "{474C83D4-6392-4F44-AA1D-B0EE2D7787A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DualPay.API", "Presentation\DualPay.API\DualPay.API.csproj", "{18480944-551C-444C-A523-7CAA0E462DC7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{082936DD-139B-4FA9-B474-36C1767C8A17} = {00E3985D-289E-4AFE-BDA4-66204FFBD0AA}
+		{B170827B-8F4A-40FA-A841-D50648728BDD} = {00E3985D-289E-4AFE-BDA4-66204FFBD0AA}
+		{481B255D-0743-41AC-9AB3-D7D6D61E1B96} = {247C0234-7D09-40DC-84F4-84EF6DD588F7}
+		{474C83D4-6392-4F44-AA1D-B0EE2D7787A5} = {247C0234-7D09-40DC-84F4-84EF6DD588F7}
+		{18480944-551C-444C-A523-7CAA0E462DC7} = {994D4A0C-29B2-4D86-8BB3-EA288C0B03B5}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{082936DD-139B-4FA9-B474-36C1767C8A17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{082936DD-139B-4FA9-B474-36C1767C8A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{082936DD-139B-4FA9-B474-36C1767C8A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{082936DD-139B-4FA9-B474-36C1767C8A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B170827B-8F4A-40FA-A841-D50648728BDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B170827B-8F4A-40FA-A841-D50648728BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B170827B-8F4A-40FA-A841-D50648728BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B170827B-8F4A-40FA-A841-D50648728BDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{481B255D-0743-41AC-9AB3-D7D6D61E1B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{481B255D-0743-41AC-9AB3-D7D6D61E1B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{481B255D-0743-41AC-9AB3-D7D6D61E1B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{481B255D-0743-41AC-9AB3-D7D6D61E1B96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{474C83D4-6392-4F44-AA1D-B0EE2D7787A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{474C83D4-6392-4F44-AA1D-B0EE2D7787A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{474C83D4-6392-4F44-AA1D-B0EE2D7787A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{474C83D4-6392-4F44-AA1D-B0EE2D7787A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18480944-551C-444C-A523-7CAA0E462DC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18480944-551C-444C-A523-7CAA0E462DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18480944-551C-444C-A523-7CAA0E462DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18480944-551C-444C-A523-7CAA0E462DC7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
