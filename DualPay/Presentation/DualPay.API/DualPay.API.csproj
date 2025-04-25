@@ -19,10 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\Core\DualPay.Application\DualPay.Application.csproj" />
       <ProjectReference Include="..\..\Core\DualPay.Domain\DualPay.Domain.csproj" />
       <ProjectReference Include="..\..\Infrastructure\DualPay.Infrastructure\DualPay.Infrastructure.csproj" />
