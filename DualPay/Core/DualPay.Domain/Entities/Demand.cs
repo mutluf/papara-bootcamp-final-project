@@ -1,4 +1,5 @@
 using DualPay.Domain.Entities.Common;
+using DualPay.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,10 +20,10 @@ public class Demand : BaseEntity
     public bool? IsApproved { get; set; }
 
     public int? ApprovedBy { get; set; }
-    public virtual Admin? ApprovedByUser { get; set; }
+    public virtual AppUser? ApprovedByUser { get; set; }
 
     public int? RejectedBy { get; set; }
-    public virtual Admin? RejectedByUser { get; set; }
+    public virtual AppUser? RejectedByUser { get; set; }
 
     public int EmployeeId { get; set; }
     public virtual Employee Employee { get; set; }

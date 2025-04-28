@@ -13,8 +13,6 @@ public class BankAccount :BaseEntity
         public bool? IsDefault {get; set;}
         public int? EmployeeId {get; set;}
         public virtual Employee? Employee {get; set;}
-        public int? CompanyId {get; set;}
-        public virtual Company? Company {get; set;}
 }
 
 public class BankAccountConfiguration : IEntityTypeConfiguration<BankAccount>
@@ -38,12 +36,5 @@ public class BankAccountConfiguration : IEntityTypeConfiguration<BankAccount>
                         .WithMany(x => x.BankAccounts)
                         .HasForeignKey(x => x.EmployeeId)
                         .IsRequired(false).OnDelete(DeleteBehavior.Cascade);
-                
-                builder.HasOne(x => x.Company)
-                        .WithMany(x => x.BankAccounts)
-                        .HasForeignKey(x => x.CompanyId)
-                        .IsRequired(false)
-                        .IsRequired(false).OnDelete(DeleteBehavior.Cascade);
-       
         }
 }  

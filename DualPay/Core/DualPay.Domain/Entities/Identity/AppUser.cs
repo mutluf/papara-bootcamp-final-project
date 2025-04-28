@@ -8,6 +8,8 @@ public class AppUser : IdentityUser<int>
 {
     public string? Name { get; set; }
     public string? Surname { get; set; }
+    
+    public Employee? Employee { get; set; }
 }
 
 public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
@@ -20,5 +22,7 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
         builder.Property(x => x.Surname)
             .IsRequired(false)
             .HasMaxLength(20);
+        
+        builder.Ignore(x => x.Employee);
     }
 }  

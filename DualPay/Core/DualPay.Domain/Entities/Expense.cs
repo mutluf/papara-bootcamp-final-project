@@ -15,6 +15,12 @@ public class Expense : BaseEntity
     public string? DocumentUrl { get; set; }
     public string Location { get; set; }
     public virtual Demand? Demand { get; set; }
+
+    public virtual Payment? Payment { get; set; }
+    
+    public Employee? Employee { get; set; }
+    
+    public int ? EmployeeId { get; set; }
 }
 
 public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
@@ -23,7 +29,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
-  
+
         builder.Property(x => x.CreatedBy).IsRequired();
         builder.Property(x => x.CreatedAt).IsRequired();
         builder.Property(x => x.UpdatedAt).IsRequired();
@@ -35,14 +41,20 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
         builder.Property(x => x.DocumentUrl).IsRequired(false).HasMaxLength(100);
         builder.Property(x => x.Status)
             .HasDefaultValue(ExpenseStatus.Pending);
+
+        builder.HasOne(x => x.ExpenseCategory)
+            .WithMany(x => x.Expenses)
+            .HasForeignKey(x => x.ExpenseCategoryId)
+            .IsRequired().OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.Demand)
+            .WithOne(x => x.Expense)
+            .IsRequired(false).OnDelete(DeleteBehavior.Restrict);
         
-        builder.HasOne(x=>x.ExpenseCategory)
-            .WithMany(x=>x.Expenses)
-            .HasForeignKey(x=>x.ExpenseCategoryId)
-            .IsRequired().OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.Employee)
+            .WithMany(x => x.Expenses)
+            .IsRequired(false).OnDelete(DeleteBehavior.Restrict);
         
-        builder.HasOne(x=>x.Demand)
-            .WithOne(x=>x.Expense)
-            .IsRequired(false).OnDelete(DeleteBehavior.Cascade);
+        builder.Ignore(x=> x.Payment);
     }
-}    
+}
