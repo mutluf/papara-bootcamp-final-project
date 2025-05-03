@@ -24,11 +24,12 @@ public class IdentitySeeder
     {
         await CheckRolesExistAsync();
         await CheckAdminExistsAsync();
+        await CheckInitialUserExistsAsync();
     }
 
     private async Task CheckRolesExistAsync()
     {
-        var roles = new[] { "Admin", "User" }; 
+        var roles = new[] { "Admin", "User" };
 
         foreach (var role in roles)
         {
@@ -70,6 +71,39 @@ public class IdentitySeeder
         else
         {
             Console.WriteLine("Failed to create admin user:");
+            foreach (var error in result.Errors)
+            {
+                Console.WriteLine($"- {error.Description}");
+            }
+        }
+    }
+
+    private async Task CheckInitialUserExistsAsync()
+    {
+        var email = _configuration["InitialUser:Email"];
+        var password = _configuration["InitialUser:Password"];
+
+        var existingUser = await _userManager.FindByEmailAsync(email);
+        if (existingUser != null)
+            return;
+
+        var user = new AppUser
+        {
+            UserName = email,
+            Email = email,
+            EmailConfirmed = true,
+            PhoneNumber = ""
+        };
+
+        var result = await _userManager.CreateAsync(user, password);
+        if (result.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(user, "User");
+            Console.WriteLine("Initial user created and added to User role.");
+        }
+        else
+        {
+            Console.WriteLine("Failed to create initial user:");
             foreach (var error in result.Errors)
             {
                 Console.WriteLine($"- {error.Description}");
