@@ -2,6 +2,7 @@ using AutoMapper;
 
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Domain.Entities;
 using MediatR;
@@ -21,8 +22,8 @@ public class GetExpenseCategoryByIdQueryHandler: IRequestHandler<GetExpenseCateg
 
     public async Task<ApiResponse<ExpenseCategoryResponse>> Handle(GetExpenseCategoryByIdRequest request, CancellationToken cancellationToken)
     {
-        ExpenseCategory category = await _expenseCategoryService.GetByIdAsync(request.Id);
-        ExpenseCategoryResponse mapped = _mapper.Map<ExpenseCategoryResponse>(category);
+        ExpenseCategoryDto expenseCategoryDto = await _expenseCategoryService.GetByIdAsync(request.Id);
+        ExpenseCategoryResponse mapped = _mapper.Map<ExpenseCategoryResponse>(expenseCategoryDto);
         return new ApiResponse<ExpenseCategoryResponse>(mapped);
     }
 }

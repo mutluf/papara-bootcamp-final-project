@@ -1,5 +1,6 @@
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 using MediatR;
 
@@ -16,14 +17,15 @@ public class DeleteExpenseCommandHandler:IRequestHandler<DeleteExpenseCommandReq
 
     public async Task<ApiResponse> Handle(DeleteExpenseCommandRequest request, CancellationToken cancellationToken)
     {
-        Expense category = await _expenseService.GetByIdAsync(request.Id);
+        ExpenseDto dto = await _expenseService.GetByIdAsync(request.Id);
 
         ApiResponse apiResponse = new ApiResponse();
-        if (category == null)
+        if (dto == null)
         {
             apiResponse.Message = "Expense not found";
             return apiResponse;
         }
+        await _expenseService.DeleteByIdAsync(request.Id);
         apiResponse.Message = "Delete expense success";
         return apiResponse;
     }

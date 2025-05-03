@@ -1,6 +1,7 @@
 using AutoMapper;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 using MediatR;
 
@@ -19,7 +20,7 @@ public class GetEmployeeByIdQueryHandler: IRequestHandler<GetEmployeeByIdRequest
 
     public async Task<ApiResponse<EmployeeDetailResponse>> Handle(GetEmployeeByIdRequest request, CancellationToken cancellationToken)
     {
-        Employee employee = await _employeeService.GetByIdAsync(request.Id);
+        EmployeeDto employee = await _employeeService.GetByIdAsync(request.Id);
         EmployeeDetailResponse mapped = _mapper.Map<EmployeeDetailResponse>(employee);
         return new ApiResponse<EmployeeDetailResponse>(mapped);
     }

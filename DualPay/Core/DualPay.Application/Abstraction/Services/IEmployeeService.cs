@@ -1,15 +1,16 @@
 using System.Linq.Expressions;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 
 namespace DualPay.Application.Abstraction.Services;
 
 public interface IEmployeeService
 {
-    Task<Employee> GetByIdAsync(int id, params string[] includes);
-    Task<List<Employee>> GetAllAsync(params string[] includes);
-    Task<List<Employee>> GetAllAsync(Expression<Func<Employee, bool>> predicate, params string[] includes);
-    Task<List<Employee>> Where(Expression<Func<Employee, bool>> predicate, params string[] includes);
-    Task<Employee> AddAsync(Employee entity);
-    Task UpdateAsync(Employee entity);
+    Task<EmployeeDto> GetByIdAsync(int id, params string[] includes);
+    Task<List<EmployeeDto>> GetAllAsync(params string[] includes);
+    Task<List<EmployeeDto>> GetAllAsync(Expression<Func<Employee, bool>> predicate, params string[] includes);
+    Task<List<EmployeeDto>> Where(Expression<Func<Employee, bool>> predicate, params string[] includes);
+    Task<EmployeeDto> AddAsync(EmployeeDto entity);
+    Task UpdateAsync(EmployeeDto entity);
     Task DeleteByIdAsync(int id);
 }

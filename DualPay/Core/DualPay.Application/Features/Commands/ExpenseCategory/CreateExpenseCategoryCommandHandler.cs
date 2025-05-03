@@ -2,6 +2,7 @@ using AutoMapper;
 using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 using MediatR;
 namespace DualPay.Application.Features.Commands.ExpenseCategories;
@@ -19,9 +20,9 @@ public class CreateExpenseCategoryCommandHandler: IRequestHandler<CreateExpenseC
 
     public async Task<ApiResponse<ExpenseCategoryResponse>> Handle(CreateExpenseCategoryCommandRequest request, CancellationToken cancellationToken)
     {
-        ExpenseCategory expenseCategory = _mapper.Map<ExpenseCategory>(request);
-        ExpenseCategory entity = await _expenseCategoryService.AddAsync(expenseCategory);
-        ExpenseCategoryResponse response = _mapper.Map<ExpenseCategoryResponse>(entity);
+        ExpenseCategoryDto expenseCategory = _mapper.Map<ExpenseCategoryDto>(request);
+        ExpenseCategoryDto expenseCategoryDto = await _expenseCategoryService.AddAsync(expenseCategory);
+        ExpenseCategoryResponse response = _mapper.Map<ExpenseCategoryResponse>(expenseCategoryDto);
         return new ApiResponse<ExpenseCategoryResponse>(response ,message:"Expense category created");
     }
 }

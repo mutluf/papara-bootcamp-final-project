@@ -1,6 +1,8 @@
 using System.Linq.Expressions;
+using AutoMapper;
 using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 
 namespace DualPay.Application.Services;
@@ -8,44 +10,49 @@ namespace DualPay.Application.Services;
 public class ExpenseService :IExpenseService
 {
     private readonly IGenericRepository<Expense> _expenseRepository;
-
-    public ExpenseService(IUnitOfWork unitOfWork)
+    private readonly IMapper _mapper;
+    public ExpenseService(IUnitOfWork unitOfWork, IMapper mapper)
     {
+        _mapper = mapper;
         _expenseRepository = unitOfWork.GetRepository<Expense>();
     }
 
 
-    public async Task<List<Expense>> GetAllAsync(params string[] includes)
+    public async Task<List<ExpenseDto>> GetAllAsync(params string[] includes)
     {
-        var datas = await _expenseRepository.GetAllAsync(includes);
-        return datas;
+        List<Expense> datas = await _expenseRepository.GetAllAsync(includes);
+        return _mapper.Map<List<ExpenseDto>>(datas);
     }
-    public async Task<List<Expense>> GetAllAsync(Expression<Func<Expense, bool>> predicate, params string[] includes)
+    public async Task<List<ExpenseDto>> GetAllAsync(Expression<Func<Expense, bool>> predicate, params string[] includes)
     {
-        var datas = await _expenseRepository.GetAllAsync(predicate, includes);
-        return datas;
-    }
-
-    public async Task<List<Expense>> Where(Expression<Func<Expense, bool>> predicate, params string[] includes)
-    {
-        var datas = await _expenseRepository.Where(predicate,includes);
-        return datas;
+        List<Expense> datas = await _expenseRepository.GetAllAsync(predicate, includes);
+        return _mapper.Map<List<ExpenseDto>>(datas);
     }
 
-    public async Task<Expense> GetByIdAsync(int id, params string[] includes)
+    public async Task<List<ExpenseDto>> Where(Expression<Func<Expense, bool>> predicate, params string[] includes)
     {
-        var data = await _expenseRepository.GetByIdAsync(id);
-        return data;
+        List<Expense> datas = await _expenseRepository.Where(predicate,includes);
+        return _mapper.Map<List<ExpenseDto>>(datas);
     }
 
-    public async Task<Expense> AddAsync(Expense entity)
+    public async Task<ExpenseDto> GetByIdAsync(int id, params string[] includes)
     {
-        return await _expenseRepository.AddAsync(entity);
+        Expense data = await _expenseRepository.GetByIdAsync(id);
+        return _mapper.Map<ExpenseDto>(data);
     }
 
-    public async Task UpdateAsync(Expense entity)
+    public async Task<ExpenseDto> AddAsync(ExpenseDto expenseDto)
     {
-        await _expenseRepository.GetByIdAsync(entity.Id);
+        Expense expense = _mapper.Map<Expense>(expenseDto);
+        Expense data = await _expenseRepository.AddAsync(expense);
+        ExpenseDto dto = _mapper.Map<ExpenseDto>(data);
+        return dto;
+    }
+
+    public async Task UpdateAsync(ExpenseDto expenseDto)
+    {
+        Expense expense = _mapper.Map<Expense>(expenseDto);
+        _expenseRepository.Update(expense);
     }
 
 

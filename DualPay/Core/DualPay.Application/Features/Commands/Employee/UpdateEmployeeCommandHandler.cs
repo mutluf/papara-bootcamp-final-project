@@ -1,6 +1,7 @@
 using AutoMapper;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 using MediatR;
 namespace DualPay.Application.Features.Commands;
@@ -18,12 +19,12 @@ public class UpdateEmployeeCommandHandler: IRequestHandler<UpdateEmployeeCommand
 
     public async Task<ApiResponse> Handle(UpdateEmployeeCommandRequest request, CancellationToken cancellationToken)
     {
-        var entity = await _employeeService.GetByIdAsync(request.Id);
-        if (entity == null)
+        EmployeeDto data = await _employeeService.GetByIdAsync(request.Id);
+        if (data == null)
             return new ApiResponse("Employee not found");
 
-        Employee employee = _mapper.Map<Employee>(request);
-         await _employeeService.UpdateAsync(employee);
+        EmployeeDto employeeDto = _mapper.Map<EmployeeDto>(data);
+        await _employeeService.UpdateAsync(employeeDto);
         return new ApiResponse();
     }
 }

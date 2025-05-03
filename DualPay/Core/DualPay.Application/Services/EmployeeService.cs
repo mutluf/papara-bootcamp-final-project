@@ -1,6 +1,8 @@
 using System.Linq.Expressions;
+using AutoMapper;
 using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 using DualPay.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -11,38 +13,40 @@ public class EmployeeService : IEmployeeService
     private IGenericRepository<Employee> _employeeRepository;
     private readonly UserManager<AppUser> _userManager;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public EmployeeService(IUnitOfWork unitOfWork, UserManager<AppUser> userManager)
+    public EmployeeService(IUnitOfWork unitOfWork, UserManager<AppUser> userManager, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
+        _mapper = mapper;
         _employeeRepository = unitOfWork.GetRepository<Employee>();
     }
 
-    public async Task<List<Employee>> GetAllAsync(params string[] includes)
+    public async Task<List<EmployeeDto>> GetAllAsync(params string[] includes)
     {
-        var datas = await _employeeRepository.GetAllAsync(includes);
-        return datas;
+        List<Employee> datas = await _employeeRepository.GetAllAsync(includes);
+        return _mapper.Map<List<EmployeeDto>>(datas);
     }
-    public async Task<List<Employee>> GetAllAsync(Expression<Func<Employee, bool>> predicate, params string[] includes)
+    public async Task<List<EmployeeDto>> GetAllAsync(Expression<Func<Employee, bool>> predicate, params string[] includes)
     {
-        var datas = await _employeeRepository.GetAllAsync(predicate, includes);
-        return datas;
-    }
-
-    public async Task<List<Employee>> Where(Expression<Func<Employee, bool>> predicate, params string[] includes)
-    {
-        var datas = await _employeeRepository.Where(predicate,includes);
-        return datas;
+        List<Employee> datas = await _employeeRepository.GetAllAsync(predicate, includes);
+        return _mapper.Map<List<EmployeeDto>>(datas);
     }
 
-    public async Task<Employee> GetByIdAsync(int id, params string[] includes)
+    public async Task<List<EmployeeDto>> Where(Expression<Func<Employee, bool>> predicate, params string[] includes)
     {
-        var data = await _employeeRepository.GetByIdAsync(id);
-        return data;
+        List<Employee> datas = await _employeeRepository.Where(predicate,includes);
+        return _mapper.Map<List<EmployeeDto>>(datas);
     }
 
-    public async Task<Employee> AddAsync(Employee request)
+    public async Task<EmployeeDto> GetByIdAsync(int id, params string[] includes)
+    {
+        Employee data = await _employeeRepository.GetByIdAsync(id);
+        return _mapper.Map<EmployeeDto>(data);
+    }
+
+    public async Task<EmployeeDto> AddAsync(EmployeeDto employeeDto)
     {
         _employeeRepository = _unitOfWork.GetRepository<Employee>();
         // var user = new AppUser
@@ -63,8 +67,8 @@ public class EmployeeService : IEmployeeService
                 var employee = new Employee
                 {
                     //UserId = user.Id,
-                    IdentityNumber = request.IdentityNumber,
-                    PhoneNumber = request.PhoneNumber,
+                    IdentityNumber = employeeDto.IdentityNumber,
+                    PhoneNumber = employeeDto.PhoneNumber,
                 };
                 await _employeeRepository.AddAsync(employee);
                 //await _userManager.AddToRoleAsync(user, "USER");
@@ -93,12 +97,12 @@ public class EmployeeService : IEmployeeService
         return null;
     }
 
-    public async Task UpdateAsync(Employee entity)
+    public async Task UpdateAsync(EmployeeDto employeeDto)
     {
-        await _employeeRepository.GetByIdAsync(entity.Id);
+        Employee employee = _mapper.Map<Employee>(employeeDto);
+        _employeeRepository.Update(employee);
     }
-
-
+    
     public async Task DeleteByIdAsync(int id)
     {
         await _employeeRepository.DeleteByIdAsync(id);

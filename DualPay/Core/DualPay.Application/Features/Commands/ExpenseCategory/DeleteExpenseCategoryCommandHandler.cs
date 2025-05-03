@@ -1,5 +1,6 @@
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 using MediatR;
 
@@ -16,7 +17,7 @@ public class DeleteExpenseCategoryCommandHandler:IRequestHandler<DeleteExpenseCa
 
     public async Task<ApiResponse> Handle(DeleteExpenseCategoryCommandRequest request, CancellationToken cancellationToken)
     {
-        ExpenseCategory category = await _expenseCategoryService.GetByIdAsync(request.Id);
+        ExpenseCategoryDto category = await _expenseCategoryService.GetByIdAsync(request.Id);
 
         ApiResponse apiResponse = new ApiResponse();
         if (category == null)

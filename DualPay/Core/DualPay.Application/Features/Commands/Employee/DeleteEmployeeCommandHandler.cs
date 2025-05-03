@@ -1,5 +1,6 @@
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 using MediatR;
 
@@ -16,7 +17,7 @@ public class DeleteEmployeeCommandHandler:IRequestHandler<DeleteEmployeeCommandR
 
     public async Task<ApiResponse> Handle(DeleteEmployeeCommandRequest request, CancellationToken cancellationToken)
     {
-        Employee employee = await _employeeService.GetByIdAsync(request.Id);
+        EmployeeDto employee = await _employeeService.GetByIdAsync(request.Id);
 
         ApiResponse apiResponse = new ApiResponse();
         if (employee == null)
@@ -24,6 +25,7 @@ public class DeleteEmployeeCommandHandler:IRequestHandler<DeleteEmployeeCommandR
             apiResponse.Message = "Employee not found";
             return apiResponse;
         }
+        await _employeeService.DeleteByIdAsync(request.Id);
         apiResponse.Message = "Delete employee success";
         return apiResponse;
     }

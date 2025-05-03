@@ -1,8 +1,7 @@
 using AutoMapper;
-using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
-using DualPay.Domain.Entities;
+using DualPay.Application.DTOs;
 using MediatR;
 
 namespace DualPay.Application.Features.Queries;
@@ -19,8 +18,8 @@ public class GetAllExpenseQueryHandler : IRequestHandler<GetAllExpensesQueryRequ
 
     public async Task<ApiResponse<List<ExpenseResponse>>> Handle(GetAllExpensesQueryRequest request, CancellationToken cancellationToken)
     {
-        List<Expense> expenses =await _expenseService.GetAllAsync();
-        List<ExpenseResponse> mapped = _mapper.Map<List<ExpenseResponse>>(expenses);
+        List<ExpenseDto> expenseDtos = await _expenseService.GetAllAsync();
+        List<ExpenseResponse> mapped = _mapper.Map<List<ExpenseResponse>>(expenseDtos);
         return new ApiResponse<List<ExpenseResponse>>(mapped);
     }
 }

@@ -1,6 +1,7 @@
 using AutoMapper;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 using MediatR;
 
@@ -19,8 +20,8 @@ public class GetExpenseByIdQueryHandler: IRequestHandler<GetExpenseByIdRequest, 
 
     public async Task<ApiResponse<ExpenseDetailResponse>> Handle(GetExpenseByIdRequest request, CancellationToken cancellationToken)
     {
-        Expense expense = await _expenseService.GetByIdAsync(request.Id);
-        ExpenseDetailResponse mapped = _mapper.Map<ExpenseDetailResponse>(expense);
+        ExpenseDto expenseDto = await _expenseService.GetByIdAsync(request.Id);
+        ExpenseDetailResponse mapped = _mapper.Map<ExpenseDetailResponse>(expenseDto);
         return new ApiResponse<ExpenseDetailResponse>(mapped);
     }
 }

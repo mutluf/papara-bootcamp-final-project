@@ -2,6 +2,7 @@ using AutoMapper;
 using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 using MediatR;
 namespace DualPay.Application.Features.Commands.ExpenseCategories;
@@ -17,13 +18,13 @@ public class UpdateExpenseCategoryCommandHandler: IRequestHandler<UpdateExpenseC
 
     public async Task<ApiResponse> Handle(UpdateExpenseCategoryCommandRequest request, CancellationToken cancellationToken)
     {
-        var entity = await _expenseCategoryService.GetByIdAsync(request.Id);
-        if (entity == null)
+        ExpenseCategoryDto expenseCategoryDto = await _expenseCategoryService.GetByIdAsync(request.Id);
+        if (expenseCategoryDto == null)
             return new ApiResponse("Category not found");
 
-        entity.Description = request.Description;
-        entity.Name = request.Name;
-        _expenseCategoryService.UpdateAsync(entity);
+        expenseCategoryDto.Description = request.Description;
+        expenseCategoryDto.Name = request.Name;
+        _expenseCategoryService.UpdateAsync(expenseCategoryDto);
         return new ApiResponse();
     }
 }
