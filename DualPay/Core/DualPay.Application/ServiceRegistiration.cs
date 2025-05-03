@@ -18,9 +18,9 @@ public static class ServiceRegistiration
         services.AddScoped<IAppUserService,AppUserService>();
         services.AddScoped<IEmployeeService,EmployeeService>();
         services.AddScoped<IExpenseService,ExpenseService>();
+        services.AddScoped<IReportService,ReportService>();
         services.AddScoped<IExpenseCategoryService,ExpenseCategoryService>();
         services.AddAutoMapper(typeof(GeneralMapping));
-        
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GeneralMapping).Assembly));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

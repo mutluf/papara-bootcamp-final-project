@@ -1,8 +1,12 @@
+using System.Data;
 using DualPay.Application.Abstraction;
 using DualPay.Domain.Entities.Identity;
 using DualPay.Persistence.Context;
+using DualPay.Persistence.Repositories;
 using DualPay.Persistence.Services;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DualPay.Persistence;
@@ -13,6 +17,7 @@ namespace DualPay.Persistence;
     {
         services.AddDbContext<DualPayDbContext>(options => options.UseSqlServer(Configuration.ConnectionString));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IReportRepository,ReportRepository>();
         
         services.AddIdentity<AppUser, AppRole>(options =>
         {
@@ -28,7 +33,12 @@ namespace DualPay.Persistence;
                 
                 
         }).AddEntityFrameworkStores<DualPayDbContext>();
-    }
-    
 
+        services.AddScoped<IDbConnection>(sp =>
+        {
+            return new SqlConnection(Configuration.ConnectionString);
+        });
+        
+       
+    }
  }
