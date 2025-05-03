@@ -22,7 +22,10 @@ public class GetEmployeeByIdQueryHandler: IRequestHandler<GetEmployeeByIdRequest
     {
         EmployeeDto employee = await _employeeService.GetByIdAsync(request.Id);
         EmployeeDetailResponse mapped = _mapper.Map<EmployeeDetailResponse>(employee);
-        return new ApiResponse<EmployeeDetailResponse>(mapped);
+        ApiResponse<EmployeeDetailResponse> response = new ApiResponse<EmployeeDetailResponse>(mapped);
+        response.Message = "Success";
+
+        return response;
     }
 }
 

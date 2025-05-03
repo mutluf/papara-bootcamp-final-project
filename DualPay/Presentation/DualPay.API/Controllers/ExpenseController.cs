@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using DualPay.Application.Common.Models;
 using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Application.Features.Queries;
@@ -23,7 +24,7 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(GetAllEmployeesQueryRequest request)
+    public async Task<IActionResult> GetAll([FromQuery] GetAllEmployeesQueryRequest request)
     {
         ApiResponse<List<EmployeeResponse>> result = await _mediator.Send(request);
         return Ok(result);
@@ -40,6 +41,12 @@ public class ExpenseController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateExpenseCommandRequest request)
     {
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(new ApiResponse("Unauthorized."));
+        }
+        request.UserId = Int32.Parse(userId);
         ApiResponse<ExpenseResponse> apiResponse = await _mediator.Send(request);
         return Ok(apiResponse);
     }

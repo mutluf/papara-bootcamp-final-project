@@ -19,7 +19,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(GetAllEmployeesQueryRequest request)
+    public async Task<IActionResult> GetAll([FromQuery] GetAllEmployeesQueryRequest request)
     {
         ApiResponse<List<EmployeeResponse>> result =await _mediator.Send(request);
         return Ok(result);

@@ -19,4 +19,5 @@ public class ExpenseDto
     public string? ApprovedBy { get; set; }
     public string? RejectedBy { get; set; }
     public string? RejectionReason { get; set; }
+    public string? UserId { get; set; }
 }

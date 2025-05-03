@@ -1,12 +1,13 @@
 using System.Data;
 using DualPay.Application.Abstraction;
 using DualPay.Domain.Entities.Identity;
+using DualPay.Infrastructure.Seeders;
 using DualPay.Persistence.Context;
 using DualPay.Persistence.Repositories;
 using DualPay.Persistence.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DualPay.Persistence;
@@ -30,15 +31,20 @@ namespace DualPay.Persistence;
             options.Password.RequiredUniqueChars = 0;
             options.User.RequireUniqueEmail= true;
             options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                
-                
+            
         }).AddEntityFrameworkStores<DualPayDbContext>();
 
+        services.AddScoped<IdentitySeeder>();
         services.AddScoped<IDbConnection>(sp =>
         {
             return new SqlConnection(Configuration.ConnectionString);
         });
-        
-       
+    }
+    
+    public static async Task UseIdentitySeederAsync(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        var seeder = scope.ServiceProvider.GetRequiredService<IdentitySeeder>();
+        await seeder.SeedAsync();
     }
  }

@@ -22,7 +22,7 @@ public class ExpenseCategoryController : ControllerBase
 
     [HttpGet]
     //[Authorize(Roles = "Admin,User")]
-    public async Task<IActionResult> GetAll([FromQuery]GetAllExpenseCategoriesRequest request)
+    public async Task<IActionResult> GetAll([FromQuery] GetAllExpenseCategoriesRequest request)
     {
         var publishService = new PublishService();
         //await publishService.Publish(new EventDto() {Id = 1});

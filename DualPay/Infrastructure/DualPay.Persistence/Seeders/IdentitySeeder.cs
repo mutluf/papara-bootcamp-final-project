@@ -1,3 +1,5 @@
+using DualPay.Application.Abstraction;
+using DualPay.Domain.Entities;
 using DualPay.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -9,15 +11,16 @@ public class IdentitySeeder
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<AppRole> _roleManager;
     private readonly IConfiguration _configuration;
-
+    private readonly IUnitOfWork _unitOfWork;
     public IdentitySeeder(
         UserManager<AppUser> userManager,
         RoleManager<AppRole> roleManager,
-        IConfiguration configuration)
+        IConfiguration configuration, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task SeedAsync()
@@ -92,7 +95,7 @@ public class IdentitySeeder
             UserName = email,
             Email = email,
             EmailConfirmed = true,
-            PhoneNumber = ""
+            PhoneNumber = "1111111111"
         };
 
         var result = await _userManager.CreateAsync(user, password);
@@ -100,6 +103,18 @@ public class IdentitySeeder
         {
             await _userManager.AddToRoleAsync(user, "User");
             Console.WriteLine("Initial user created and added to User role.");
+
+            var employee = new Employee
+            {
+                UserId = user.Id,
+                IdentityNumber = "12345678912",
+                PhoneNumber = "1234567891",
+                AccountNumber = "1234567891"
+            };
+
+            await _unitOfWork.GetRepository<Employee>().AddAsync(employee);
+            await _unitOfWork.Complete();
+            Console.WriteLine("Employee Created..");
         }
         else
         {
@@ -110,4 +125,5 @@ public class IdentitySeeder
             }
         }
     }
+
 }

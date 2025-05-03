@@ -15,7 +15,6 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
     
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        // Request için tüm validatörleri çalıştırıyoruz
         var failures = _validators
             .Select(v => v.Validate(request))
             .SelectMany(result => result.Errors)
