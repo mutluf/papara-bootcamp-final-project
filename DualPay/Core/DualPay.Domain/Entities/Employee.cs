@@ -20,6 +20,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
     {
         builder.Property(x => x.PhoneNumber).IsRequired().HasMaxLength(10);
         builder.Property(x => x.IdentityNumber).IsRequired().HasMaxLength(11);
+        builder.Property(x => x.AccountNumber).IsRequired().HasMaxLength(30);
 
         
         builder.HasOne(e => e.AppUser)

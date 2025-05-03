@@ -1,12 +1,7 @@
 using System.Linq.Expressions;
-using AutoMapper;
 using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
-using DualPay.Application.Common.Models;
-using DualPay.Application.Common.Models.Requests;
-using DualPay.Application.Models.Responses;
 using DualPay.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace DualPay.Application.Services;
 

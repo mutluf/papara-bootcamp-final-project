@@ -1,6 +1,4 @@
-using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
-using DualPay.Application.Common.Models.Requests;
 using DualPay.Application.Features.Commands;
 using DualPay.Application.Features.Queries;
 using MediatR;
@@ -35,14 +33,14 @@ public class EmployeeController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create(CreateEmployeeRequest request)
+    public async Task<IActionResult> Create(CreateEmployeeCommandRequest request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPut]
-    public async Task<IActionResult> Update(UpdateEmployeeRequest request)
+    public async Task<IActionResult> Update(UpdateEmployeeCommandRequest request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);

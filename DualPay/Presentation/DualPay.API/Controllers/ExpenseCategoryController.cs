@@ -1,5 +1,4 @@
 using DualPay.Application.Common.Models;
-using DualPay.Application.Common.Models.Requests;
 using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Application.Features.Queries;
 using MediatR;
@@ -37,14 +36,14 @@ public class ExpenseCategoryController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create(CreateExpenseCategoryRequest request)
+    public async Task<IActionResult> Create([FromBody]CreateExpenseCategoryCommandRequest request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPut]
-    public async Task<IActionResult> Update(UpdateExpenseCategoryRequest request)
+    public async Task<IActionResult> Update(UpdateExpenseCategoryCommandRequest request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);

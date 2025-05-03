@@ -1,7 +1,4 @@
 using System.Linq.Expressions;
-using DualPay.Application.Common.Models;
-using DualPay.Application.Common.Models.Requests;
-using DualPay.Application.Models.Responses;
 using DualPay.Domain.Entities;
 
 namespace DualPay.Application.Abstraction.Services;

@@ -1,5 +1,4 @@
 using DualPay.Application.Common.Models;
-using DualPay.Application.Common.Models.Requests;
 using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Application.Features.Queries;
 using MediatR;
@@ -37,14 +36,14 @@ public class ExpenseController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create(CreateExpenseRequest request)
+    public async Task<IActionResult> Create(CreateExpenseCommandRequest request)
     {
         var result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPut("{id}")] // ektra auth olanla güncellemek istenen id arasında kontrol.
-    public async Task<IActionResult> Update(UpdateExpenseRequest request)
+    public async Task<IActionResult> Update(UpdateExpenseCommandRequest request)
     {
         // System.Security.Claims.ClaimTypes.NameIdentifier;
         // HttpContext.User.Claims
