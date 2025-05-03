@@ -1,0 +1,44 @@
+using AutoMapper;
+using DualPay.Application.Abstraction.Services;
+using DualPay.Application.Common.Models;
+using DualPay.Domain.Entities;
+using MediatR;
+
+namespace DualPay.Application.Features.Queries;
+
+public class GetEmployeeByIdQueryHandler: IRequestHandler<GetEmployeeByIdRequest, ApiResponse<EmployeeDetailResponse>>
+{
+    private readonly IEmployeeService _employeeService;
+    private readonly IMapper _mapper;
+
+    public GetEmployeeByIdQueryHandler(IMapper mapper, IEmployeeService employeeService)
+    {
+        _mapper = mapper;
+        _employeeService = employeeService;
+    }
+
+    public async Task<ApiResponse<EmployeeDetailResponse>> Handle(GetEmployeeByIdRequest request, CancellationToken cancellationToken)
+    {
+        Employee employee = await _employeeService.GetByIdAsync(request.Id);
+        EmployeeDetailResponse mapped = _mapper.Map<EmployeeDetailResponse>(employee);
+        return new ApiResponse<EmployeeDetailResponse>(mapped);
+    }
+}
+
+public class GetEmployeeByIdRequest : IRequest<ApiResponse<EmployeeDetailResponse>>
+{
+    public int Id { get; set; }
+}
+
+public class EmployeeDetailResponse
+{
+    public int UserId { get; set; }
+    public string Name { get; set; }
+    public string Username { get; set; }
+    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
+    public string AccountNumber { get; set; }
+    public string IdentityNumber { get; set; }
+    
+    public List<Expense>? Expenses { get; set; }
+}

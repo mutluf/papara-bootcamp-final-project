@@ -10,4 +10,5 @@ public class ExpenseResponse
     public ExpenseStatus Status { get; set; }
     public string? DocumentUrl { get; set; }
     public string Location { get; set; }
+    public string CreatedByName { get; set; }
 }

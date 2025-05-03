@@ -8,10 +8,11 @@ namespace DualPay.Application.Abstraction.Services;
 
 public interface IExpenseCategoryService
 {
-    ApiResponse<List<ExpenseCategoryResponse>> GetAll(bool tracking);
-    ApiResponse<List<ExpenseCategoryResponse>> GetWhere(Expression<Func<ExpenseCategory, bool>> method, bool tracking = true);
-    Task<ApiResponse<ExpenseCategoryResponse>> GetByIdAsync(int id, bool tracking = false);
-    Task<ApiResponse<ExpenseCategoryResponse>> AddAsync(CreateExpenseCategoryRequest request);
-    ApiResponse<object> Update(UpdateExpenseCategoryRequest request);
+    Task<ExpenseCategory> GetByIdAsync(int id, params string[] includes);
+    Task<List<ExpenseCategory>> GetAllAsync(params string[] includes);
+    Task<List<ExpenseCategory>> GetAllAsync(Expression<Func<ExpenseCategory, bool>> predicate, params string[] includes);
+    Task<List<ExpenseCategory>> Where(Expression<Func<ExpenseCategory, bool>> predicate, params string[] includes);
+    Task<ExpenseCategory> AddAsync(ExpenseCategory entity);
+    Task UpdateAsync(ExpenseCategory entity);
     Task DeleteByIdAsync(int id);
 }

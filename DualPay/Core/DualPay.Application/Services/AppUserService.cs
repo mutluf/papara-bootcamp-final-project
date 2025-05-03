@@ -1,8 +1,8 @@
 using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Token;
-using DualPay.Application.Common.Models;
 using DualPay.Application.DTOs;
 using DualPay.Domain.Entities.Identity;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace DualPay.Application.Services;
@@ -20,7 +20,7 @@ public class AppUserService : IAppUserService
         _tokenHandler = tokenHandler;
     }
 
-    public async Task<ApiResponse<object>> CreateUserAsync(CreateAppUserRequest request)
+    public async Task CreateUserAsync(CreateAppUserRequest request)
     {
         IdentityResult result = await _userManager.CreateAsync(new()
         {
@@ -29,21 +29,8 @@ public class AppUserService : IAppUserService
             Surname=request.Surname,
             Email = request.Email,
         }, request.Password);
-        
-        ApiResponse<object> response = new() { Success = result.Succeeded};
-        if (result.Succeeded)
-        {
-            response.Message = "User created successfully.";
-        }
-        else
-        {
-            response.Message = "User creation failed.";
-            response.Errors = result.Errors.Select(e => $"{e.Code}: {e.Description}").ToList();
-        }
-
-        return response;
     }
-    public async Task<ApiResponse<object>> LoginUserAsync(LoginAppUserRequest request)
+    public async Task<Token> LoginUserAsync(LoginAppUserRequest request)
     {
         AppUser user = await _userManager.FindByNameAsync(request.UsernameOrEmail);            
         if (user == null)
@@ -54,23 +41,17 @@ public class AppUserService : IAppUserService
             throw new Exception();
         }
         SignInResult signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-        ApiResponse<object> response = new() { Success = signInResult.Succeeded};
         if (signInResult.Succeeded)
         {
             Token token = await _tokenHandler.CreateTokenAsync(120, user);
-            response.Data = token;
-            response.Message = "Login successfully";
+            return token;
         }
-        else
-        {
-            response.Message ="Username or password is incorrect.";
-        }
-        
-        return response;
+
+        return new Token();
     }
 }
 
-public class CreateAppUserRequest
+public class CreateAppUserRequest :IRequest<Token>
 {
     public string Name { get; set; }
     public string Surname { get; set; }

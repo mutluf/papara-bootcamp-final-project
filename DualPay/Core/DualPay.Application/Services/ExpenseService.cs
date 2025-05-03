@@ -1,73 +1,53 @@
 using System.Linq.Expressions;
-using AutoMapper;
 using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
-using DualPay.Application.Common.Models;
-using DualPay.Application.Common.Models.Requests;
-using DualPay.Application.Models.Responses;
 using DualPay.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace DualPay.Application.Services;
 
 public class ExpenseService :IExpenseService
 {
     private readonly IGenericRepository<Expense> _expenseRepository;
-    private readonly IMapper _mapper;
 
-    public ExpenseService(IUnitOfWork unitOfWork, IMapper mapper)
+    public ExpenseService(IUnitOfWork unitOfWork)
     {
-        _mapper = mapper;
         _expenseRepository = unitOfWork.GetRepository<Expense>();
     }
 
-    public ApiResponse<List<ExpenseResponse>> GetAll(bool tracking)
+
+    public async Task<List<Expense>> GetAllAsync(params string[] includes)
     {
-        var datas = _expenseRepository.GetAll(tracking).ToList();
-        var mapped = _mapper.Map<List<ExpenseResponse>>(datas);
-        
-        var apiResponse = new ApiResponse<List<ExpenseResponse>>(mapped); 
-        apiResponse.Success = true;
-        return apiResponse;
+        var datas = await _expenseRepository.GetAllAsync(includes);
+        return datas;
+    }
+    public async Task<List<Expense>> GetAllAsync(Expression<Func<Expense, bool>> predicate, params string[] includes)
+    {
+        var datas = await _expenseRepository.GetAllAsync(predicate, includes);
+        return datas;
     }
 
-    public ApiResponse<List<ExpenseResponse>> GetWhere(Expression<Func<Expense, bool>> method, bool tracking = true)
+    public async Task<List<Expense>> Where(Expression<Func<Expense, bool>> predicate, params string[] includes)
     {
-        var datas = _expenseRepository.GetWhere(method,tracking).ToList();
-        var mapped = _mapper.Map<List<ExpenseResponse>>(datas);
-        
-        var apiResponse = new ApiResponse<List<ExpenseResponse>>(mapped); 
-        apiResponse.Success = true;
-        return apiResponse;
+        var datas = await _expenseRepository.Where(predicate,includes);
+        return datas;
     }
 
-    public async Task<ApiResponse<ExpenseResponse>> GetByIdAsync(int id, bool tracking = true)
+    public async Task<Expense> GetByIdAsync(int id, params string[] includes)
     {
-        var data = await _expenseRepository.GetByIdAsync(id,tracking);
-        var mapped = _mapper.Map<ExpenseResponse>(data);
-        
-        var apiResponse = new ApiResponse<ExpenseResponse>(mapped); 
-        apiResponse.Success = true;
-        return apiResponse;
+        var data = await _expenseRepository.GetByIdAsync(id);
+        return data;
     }
 
-    public async Task<ApiResponse<ExpenseResponse>> AddAsync(CreateExpenseRequest request)
+    public async Task<Expense> AddAsync(Expense entity)
     {
-        var entity = _mapper.Map<Expense>(request);
-        var data = await _expenseRepository.AddAsync(entity);
-        
-        var response = _mapper.Map<ExpenseResponse>(data);
-        var apiResponse = new ApiResponse<ExpenseResponse>(response); 
-        apiResponse.Success = true;
-        return apiResponse;
+        return await _expenseRepository.AddAsync(entity);
     }
 
-    public ApiResponse<object> Update(UpdateExpenseRequest request)
+    public async Task UpdateAsync(Expense entity)
     {
-        var entity = _mapper.Map<Expense>(request);
-        _expenseRepository.Update(entity);
-        return new ApiResponse<object>(){Success=true};
+        await _expenseRepository.GetByIdAsync(entity.Id);
     }
+
 
     public async Task DeleteByIdAsync(int id)
     {

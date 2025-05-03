@@ -1,6 +1,11 @@
 using DualPay.Application.Abstraction.Services;
+using DualPay.Application.Common.Models;
 using DualPay.Application.Common.Models.Requests;
+using DualPay.Application.Features.Commands;
+using DualPay.Application.Features.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using EmployeeResponse = DualPay.Application.Features.Queries.EmployeeResponse;
 
 namespace DualPay.API.Controllers;
 
@@ -8,45 +13,45 @@ namespace DualPay.API.Controllers;
 [Route("api/employees")]
 public class EmployeeController : ControllerBase
 {
-    private readonly IEmployeeService _employeeService;
+    private readonly IMediator _mediator;
 
-    public EmployeeController(IEmployeeService employeeService)
+    public EmployeeController(IMediator mediator)
     {
-        _employeeService = employeeService;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(GetAllEmployeesQueryRequest request)
     {
-        var result = _employeeService.GetAll(false);
+        ApiResponse<List<EmployeeResponse>> result =await _mediator.Send(request);
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] int id)
+    public async Task<IActionResult> GetById(GetEmployeeByIdRequest request)
     {
-        var result = await _employeeService.GetByIdAsync(id);
+        ApiResponse<EmployeeDetailResponse> result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPost]
     public async Task<IActionResult> Create(CreateEmployeeRequest request)
     {
-        var result = await _employeeService.AddAsync(request);
+        var result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPut]
-    public IActionResult Create(UpdateEmployeeRequest request)
+    public async Task<IActionResult> Update(UpdateEmployeeRequest request)
     {
-        var result = _employeeService.Update(request);
+        var result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Create([FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] DeleteEmployeeCommandRequest request)
     {
-        await _employeeService.DeleteByIdAsync(id);
+       await _mediator.Send(request);
         return Ok();
     }
 }

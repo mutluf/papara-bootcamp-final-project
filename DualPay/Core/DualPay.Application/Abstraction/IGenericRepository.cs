@@ -5,11 +5,13 @@ namespace DualPay.Application.Abstraction;
 
 public interface IGenericRepository<TEntity> where TEntity : BaseEntity
 {
-    IQueryable<TEntity> GetAll(bool tracking=true);
-    IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> method, bool tracking = true);
-    Task<TEntity> GetByIdAsync(int id, bool tracking = true);
+    Task SaveChangesAsync();
+    Task<TEntity> GetByIdAsync(long id, params string[] includes);
+    Task<List<TEntity>> GetAllAsync(params string[] includes);
+    Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, params string[] includes);
+    Task<List<TEntity>> Where(Expression<Func<TEntity, bool>> predicate, params string[] includes);
     Task<TEntity> AddAsync(TEntity entity);
     void Update(TEntity entity);
-    Task DeleteByIdAsync(int id);
-    Task SaveChangesAsync();
+    void Delete(TEntity entity);
+    Task DeleteByIdAsync(long id);
 }

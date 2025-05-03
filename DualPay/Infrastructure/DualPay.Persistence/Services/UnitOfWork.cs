@@ -22,7 +22,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     // public IGenericRepository<BankAccount> BankAccountRepository => new GenericRepository<BankAccount>(_dbContext);
     // public IGenericRepository<Company> CompanyRepository => new GenericRepository<Company>(_dbContext);
-    // public IGenericRepository<Demand> DemandRepository => new GenericRepository<Demand>(_dbContext);
     // public IGenericRepository<Expense> ExpenseRepository => new GenericRepository<Expense>(_dbContext);
     // public IGenericRepository<ExpenseCategory> ExpenseCategoryRepository => new GenericRepository<ExpenseCategory>(_dbContext);
     // public IGenericRepository<Payment> PaymentRepository => new GenericRepository<Payment>(_dbContext);

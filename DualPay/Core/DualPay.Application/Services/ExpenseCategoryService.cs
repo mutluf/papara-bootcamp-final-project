@@ -13,61 +13,46 @@ namespace DualPay.Application.Services;
 public class ExpenseCategoryService :IExpenseCategoryService
 {
     private readonly IGenericRepository<ExpenseCategory> _expenseCategoryRepository;
-    private readonly IMapper _mapper;
 
-    public ExpenseCategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+    public ExpenseCategoryService(IUnitOfWork unitOfWork)
     {
-        _mapper = mapper;
         _expenseCategoryRepository = unitOfWork.GetRepository<ExpenseCategory>();
     }
 
-    public ApiResponse<List<ExpenseCategoryResponse>> GetAll(bool tracking)
+
+    public async Task<List<ExpenseCategory>> GetAllAsync(params string[] includes)
     {
-        var datas = _expenseCategoryRepository.GetAll(tracking).ToList();
-        var mapped = _mapper.Map<List<ExpenseCategoryResponse>>(datas);
-        
-        var apiResponse = new ApiResponse<List<ExpenseCategoryResponse>>(mapped); 
-        apiResponse.Success = true;
-        return apiResponse;
+        var datas = await _expenseCategoryRepository.GetAllAsync(includes);
+        return datas;
+    }
+    public async Task<List<ExpenseCategory>> GetAllAsync(Expression<Func<ExpenseCategory, bool>> predicate, params string[] includes)
+    {
+        var datas = await _expenseCategoryRepository.GetAllAsync(predicate, includes);
+        return datas;
     }
 
-    public ApiResponse<List<ExpenseCategoryResponse>> GetWhere(Expression<Func<ExpenseCategory, bool>> method, bool tracking = true)
+    public async Task<List<ExpenseCategory>> Where(Expression<Func<ExpenseCategory, bool>> predicate, params string[] includes)
     {
-        var datas = _expenseCategoryRepository.GetWhere(method,tracking).ToList();
-        var mapped = _mapper.Map<List<ExpenseCategoryResponse>>(datas);
-        
-        var apiResponse = new ApiResponse<List<ExpenseCategoryResponse>>(mapped); 
-        apiResponse.Success = true;
-        return apiResponse;
+        var datas = await _expenseCategoryRepository.Where(predicate,includes);
+        return datas;
     }
 
-    public async Task<ApiResponse<ExpenseCategoryResponse>> GetByIdAsync(int id, bool tracking = true)
+    public async Task<ExpenseCategory> GetByIdAsync(int id, params string[] includes)
     {
-        var data = await _expenseCategoryRepository.GetByIdAsync(id,tracking);
-        var mapped = _mapper.Map<ExpenseCategoryResponse>(data);
-        
-        var apiResponse = new ApiResponse<ExpenseCategoryResponse>(mapped); 
-        apiResponse.Success = true;
-        return apiResponse;
+        var data = await _expenseCategoryRepository.GetByIdAsync(id);
+        return data;
     }
 
-    public async Task<ApiResponse<ExpenseCategoryResponse>> AddAsync(CreateExpenseCategoryRequest request)
+    public async Task<ExpenseCategory> AddAsync(ExpenseCategory entity)
     {
-        var entity = _mapper.Map<ExpenseCategory>(request);
-        var data = await _expenseCategoryRepository.AddAsync(entity);
-        
-        var response = _mapper.Map<ExpenseCategoryResponse>(data);
-        var apiResponse = new ApiResponse<ExpenseCategoryResponse>(response); 
-        apiResponse.Success = true;
-        return apiResponse;
+        return await _expenseCategoryRepository.AddAsync(entity);
     }
 
-    public ApiResponse<object> Update(UpdateExpenseCategoryRequest request)
+    public async Task UpdateAsync(ExpenseCategory entity)
     {
-        var entity = _mapper.Map<ExpenseCategory>(request);
-        _expenseCategoryRepository.Update(entity);
-        return new ApiResponse<object>(){Success=true};
+        await _expenseCategoryRepository.GetByIdAsync(entity.Id);
     }
+
 
     public async Task DeleteByIdAsync(int id)
     {

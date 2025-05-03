@@ -16,58 +16,61 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     }
     public DbSet<TEntity> Table => _dbContext.Set<TEntity>();
     
-    public IQueryable<TEntity> GetAll(bool tracking = true)
+   public async Task<TEntity> AddAsync(TEntity entity)
     {
-        var query = Table.AsQueryable();
-        if (!tracking)
-        {
-            query = query.AsNoTracking();
-
-        }
-        return query;
-    }
-    public async Task<TEntity> GetByIdAsync(int id, bool tracking = true)
-        
-    {
-        var query = Table.AsQueryable();
-        if (!tracking)
-        {
-            query = Table.AsNoTracking();
-        }
-        return await query.FirstOrDefaultAsync(data => data.Id == id);
-    }
-    public IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> method, bool tracking = true)
-    {
-        var query = Table.Where(method).AsQueryable();
-        if (!tracking)
-        {
-            query = query.AsNoTracking();
-
-        }
-        return query;
-    }
-    public async Task<TEntity> AddAsync(TEntity entity)
-    {
-        await _dbContext.Set<TEntity>().AddAsync(entity);
+        await Table.AddAsync(entity);
         return entity;
     }
-    
-    public void Update(TEntity entity)
+   
+    public async Task DeleteByIdAsync(long id)
     {
-        _dbContext.Set<TEntity>().Update(entity);
-    }
-
-    public async Task DeleteByIdAsync(int id)
-    {
-        var entity = await _dbContext.Set<TEntity>().FindAsync(id);
+        var entity = await Table.FindAsync(id);
         if (entity != null)
         {
-            _dbContext.Set<TEntity>().Remove(entity);
+            Table.Remove(entity);
         }
     }
     
+    public void Delete(TEntity entity)
+    {
+        Table.Remove(entity);
+    }
+    
+    public async Task<List<TEntity>> GetAllAsync(params string[] includes)
+    {
+        var query = Table.AsQueryable();
+        query = includes.Aggregate(query, (current, inc) => EntityFrameworkQueryableExtensions.Include(current, inc));
+        return await EntityFrameworkQueryableExtensions.ToListAsync(query);
+    }
+
+    public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, params string[] includes)
+    {
+        var query = Table.Where(predicate).AsQueryable();
+        query = includes.Aggregate(query, (current, inc) => EntityFrameworkQueryableExtensions.Include(current, inc));
+        return await EntityFrameworkQueryableExtensions.ToListAsync(query);
+    }
+
+    public async Task<TEntity> GetByIdAsync(long id, params string[] includes)
+    {
+        var query = Table.AsQueryable();
+        query = includes.Aggregate(query, (current, inc) => EntityFrameworkQueryableExtensions.Include(current, inc));
+        return await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(query, x => x.Id == id);
+    }
+
     public async Task SaveChangesAsync()
     {
         await _dbContext.SaveChangesAsync();
+    }
+
+    public void Update(TEntity entity)
+    {
+        Table.Update(entity);
+    }
+
+    public async Task<List<TEntity>> Where(Expression<Func<TEntity, bool>> predicate, params string[] includes)
+    {
+        var query = Table.Where(predicate).AsQueryable();
+        query = includes.Aggregate(query, (current, inc) => EntityFrameworkQueryableExtensions.Include(current, inc));
+        return await EntityFrameworkQueryableExtensions.ToListAsync(query);
     }
 }

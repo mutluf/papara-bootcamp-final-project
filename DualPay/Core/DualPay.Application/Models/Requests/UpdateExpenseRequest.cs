@@ -8,7 +8,6 @@ public class UpdateExpenseRequest
     public string Description { get; set; }
     public int ExpenseCategoryId { get; set; }
     public decimal Amount { get; set; }
-    public ExpenseStatus Status { get; set; }
     public string? DocumentUrl { get; set; }
     public string Location { get; set; }
 

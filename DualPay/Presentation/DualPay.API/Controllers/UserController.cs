@@ -1,6 +1,5 @@
-using System.Net;
 using DualPay.Application.Abstraction;
-using DualPay.Application.Common.Models;
+using DualPay.Application.DTOs;
 using DualPay.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,14 +19,14 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateUser(CreateAppUserRequest request)
     {
-        var apiResponse = await _appUserService.CreateUserAsync(request);
-        return Ok(apiResponse);
+        await _appUserService.CreateUserAsync(request);
+        return Ok();
     }
     
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginAppUserRequest request)
     {
-        ApiResponse<object> response = await _appUserService.LoginUserAsync(request);
-        return Ok(response);
+        Token token = await _appUserService.LoginUserAsync(request);
+        return Ok(token);
     }
 }

@@ -1,5 +1,8 @@
-using DualPay.Application.Abstraction.Services;
+using DualPay.Application.Common.Models;
 using DualPay.Application.Common.Models.Requests;
+using DualPay.Application.Features.Commands.ExpenseCategories;
+using DualPay.Application.Features.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DualPay.API.Controllers;
@@ -12,46 +15,47 @@ public class ExpenseController : ControllerBase
     // EmployeeId setlenecek.
     // PUT yapısında, yani expense güncelleme yapısında auth dikkate alınacak.!
     
-    private readonly IExpenseService _ExpenseService;
-    public ExpenseController(IExpenseService ExpenseService)
+    private readonly IMediator _mediator;
+
+    public ExpenseController(IMediator mediator)
     {
-        _ExpenseService = ExpenseService;
+        _mediator = mediator;
     }
-    
+
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(GetAllEmployeesQueryRequest request)
     {
-        var result = _ExpenseService.GetAll(false);
+        ApiResponse<List<EmployeeResponse>> result = await _mediator.Send(request);
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] int id)
+    public async Task<IActionResult> GetById(GetExpenseByIdRequest  request)
     {
-        var result = await _ExpenseService.GetByIdAsync(id);
+        ApiResponse<ExpenseDetailResponse> result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPost]
     public async Task<IActionResult> Create(CreateExpenseRequest request)
     {
-        var result = await _ExpenseService.AddAsync(request);
+        var result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPut("{id}")] // ektra auth olanla güncellemek istenen id arasında kontrol.
-    public IActionResult Update(UpdateExpenseRequest request)
+    public async Task<IActionResult> Update(UpdateExpenseRequest request)
     {
         // System.Security.Claims.ClaimTypes.NameIdentifier;
         // HttpContext.User.Claims
-        var result = _ExpenseService.Update(request);
+        var result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] DeleteExpenseCategoryCommandRequest request)
     {
-        await _ExpenseService.DeleteByIdAsync(id);
+        await _mediator.Send(request);
         return Ok();
     }
 }

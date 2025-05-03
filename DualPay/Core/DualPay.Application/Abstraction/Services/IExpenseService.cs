@@ -1,17 +1,15 @@
 using System.Linq.Expressions;
-using DualPay.Application.Common.Models;
-using DualPay.Application.Common.Models.Requests;
-using DualPay.Application.Models.Responses;
 using DualPay.Domain.Entities;
 
 namespace DualPay.Application.Abstraction.Services;
 
 public interface IExpenseService
 {
-    ApiResponse<List<ExpenseResponse>> GetAll(bool tracking);
-    ApiResponse<List<ExpenseResponse>> GetWhere(Expression<Func<Expense, bool>> method, bool tracking = true);
-    Task<ApiResponse<ExpenseResponse>> GetByIdAsync(int id, bool tracking = false);
-    Task<ApiResponse<ExpenseResponse>> AddAsync(CreateExpenseRequest request);
-    ApiResponse<object> Update(UpdateExpenseRequest request);
+    Task<Expense> GetByIdAsync(int id, params string[] includes);
+    Task<List<Expense>> GetAllAsync(params string[] includes);
+    Task<List<Expense>> GetAllAsync(Expression<Func<Expense, bool>> predicate, params string[] includes);
+    Task<List<Expense>> Where(Expression<Func<Expense, bool>> predicate, params string[] includes);
+    Task<Expense> AddAsync(Expense entity);
+    Task UpdateAsync(Expense entity);
     Task DeleteByIdAsync(int id);
 }

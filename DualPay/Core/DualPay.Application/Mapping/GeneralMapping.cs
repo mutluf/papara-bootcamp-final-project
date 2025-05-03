@@ -13,12 +13,14 @@ public class GeneralMapping :Profile
         CreateMap<CreateExpenseCategoryRequest, ExpenseCategory>();
         CreateMap<UpdateExpenseCategoryRequest, ExpenseCategory>();
         
-        CreateMap<Expense, ExpenseResponse>();
+        CreateMap<Expense, ExpenseResponse>()
+            .ForMember(dest => dest.CreatedByName, opt => opt.MapFrom(src => src.AppUser.Name));
         CreateMap<CreateExpenseRequest, Expense>();
         CreateMap<UpdateExpenseRequest, Expense>();
         
         CreateMap<Employee, EmployeeResponse>();
         CreateMap<CreateEmployeeRequest, Employee>();
         CreateMap<UpdateEmployeeRequest, Employee>();
+        
     }
 }

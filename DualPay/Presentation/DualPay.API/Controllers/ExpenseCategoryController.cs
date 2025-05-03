@@ -1,7 +1,10 @@
-
-using DualPay.Application.Abstraction.Services;
+using DualPay.Application.Common.Models;
 using DualPay.Application.Common.Models.Requests;
+using DualPay.Application.Features.Commands.ExpenseCategories;
+using DualPay.Application.Features.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ExpenseResponse = DualPay.Application.Features.Queries.ExpenseResponse;
 
 namespace DualPay.API.Controllers;
 
@@ -9,44 +12,48 @@ namespace DualPay.API.Controllers;
 [Route("api/expense-categories")]
 public class ExpenseCategoryController : ControllerBase
 {
-    private readonly IExpenseCategoryService _expenseCategoryService;
-    public ExpenseCategoryController(IExpenseCategoryService expenseCategoryService)
+    private readonly IMediator _mediator;
+
+    public ExpenseCategoryController(IMediator mediator)
     {
-        _expenseCategoryService = expenseCategoryService;
+        _mediator = mediator;
     }
-    
+
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    //[Authorize(Roles = "User,Admin")]
+    public async Task<IActionResult> GetAll(GetAllExpensesQueryRequest request)
     {
-        var result = _expenseCategoryService.GetAll(false);
+        var publishService = new PublishService();
+        await publishService.Publish(new EventDto() {Id = 1});
+        ApiResponse<List<ExpenseResponse>> result = await _mediator.Send(request);
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] int id)
+    public async Task<IActionResult> GetById([FromRoute] GetExpenseCategoryByIdRequest request)
     {
-        var result = await _expenseCategoryService.GetByIdAsync(id);
+        ApiResponse<ExpenseCategoryResponse> result =await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPost]
     public async Task<IActionResult> Create(CreateExpenseCategoryRequest request)
     {
-        var result = await _expenseCategoryService.AddAsync(request);
+        var result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPut]
-    public IActionResult Create(UpdateExpenseCategoryRequest request)
+    public async Task<IActionResult> Update(UpdateExpenseCategoryRequest request)
     {
-        var result = _expenseCategoryService.Update(request);
+        var result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Create([FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] DeleteExpenseCategoryCommandRequest request)
     {
-        await _expenseCategoryService.DeleteByIdAsync(id);
+        await _mediator.Send(request);
         return Ok();
     }
 }

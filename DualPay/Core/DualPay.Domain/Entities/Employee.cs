@@ -4,16 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DualPay.Domain.Entities;
-
 public class Employee : BaseEntity
 {
     public int UserId { get; set; }
     public AppUser AppUser { get; set; }
     public string PhoneNumber { get; set; }
-    public virtual List<Demand>? Demands { get; set; }
-    public virtual List<BankAccount>? BankAccounts { get; set; }
+    public string AccountNumber { get; set; }
     public string IdentityNumber { get; set; }
-    
     public virtual List<Expense>? Expenses { get; set; }
 }
 
@@ -24,15 +21,6 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         builder.Property(x => x.PhoneNumber).IsRequired().HasMaxLength(10);
         builder.Property(x => x.IdentityNumber).IsRequired().HasMaxLength(11);
 
-        builder.HasMany(x => x.Demands)
-            .WithOne(x => x.Employee)
-            .HasForeignKey(x => x.EmployeeId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasMany(x => x.BankAccounts)
-            .WithOne(x => x.Employee)
-            .HasForeignKey(x => x.EmployeeId)
-            .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasOne(e => e.AppUser)
             .WithOne()
