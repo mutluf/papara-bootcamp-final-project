@@ -3,6 +3,7 @@ using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Application.Features.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ExpenseResponse = DualPay.Application.Features.Commands.ExpenseCategories.ExpenseResponse;
 
 namespace DualPay.API.Controllers;
 
@@ -29,32 +30,35 @@ public class ExpenseController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(GetExpenseByIdRequest  request)
+    public async Task<IActionResult> GetById([FromRoute] GetExpenseByIdRequest  request, [FromRoute] int id)
     {
+        request.Id = id;
         ApiResponse<ExpenseDetailResponse> result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create(CreateExpenseCommandRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateExpenseCommandRequest request)
     {
-        var result = await _mediator.Send(request);
-        return Ok(result);
+        ApiResponse<ExpenseResponse> apiResponse = await _mediator.Send(request);
+        return Ok(apiResponse);
     }
     
     [HttpPut("{id}")] // ektra auth olanla güncellemek istenen id arasında kontrol.
-    public async Task<IActionResult> Update(UpdateExpenseCommandRequest request)
+    public async Task<IActionResult> Update([FromBody] UpdateExpenseCommandRequest request,  [FromRoute] int id)
     {
         // System.Security.Claims.ClaimTypes.NameIdentifier;
         // HttpContext.User.Claims
-        var result = await _mediator.Send(request);
-        return Ok(result);
+        request.Id = id;
+        ApiResponse apiResponse = await _mediator.Send(request);
+        return Ok(apiResponse);
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] DeleteExpenseCategoryCommandRequest request)
+    public async Task<IActionResult> Delete([FromRoute] DeleteExpenseCategoryCommandRequest request, [FromRoute] int id)
     {
-        await _mediator.Send(request);
+        request.Id = id;
+        ApiResponse apiResponse = await _mediator.Send(request);
         return Ok();
     }
 }

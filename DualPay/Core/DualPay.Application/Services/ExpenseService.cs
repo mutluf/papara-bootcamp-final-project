@@ -20,7 +20,7 @@ public class ExpenseService :IExpenseService
 
     public async Task<List<ExpenseDto>> GetAllAsync(params string[] includes)
     {
-        List<Expense> datas = await _expenseRepository.GetAllAsync(includes);
+        List<Expense> datas = await _expenseRepository.GetAllAsync();
         return _mapper.Map<List<ExpenseDto>>(datas);
     }
     public async Task<List<ExpenseDto>> GetAllAsync(Expression<Func<Expense, bool>> predicate, params string[] includes)

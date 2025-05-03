@@ -25,6 +25,7 @@ public class DeleteExpenseCategoryCommandHandler:IRequestHandler<DeleteExpenseCa
             apiResponse.Message = "Expense category not found";
             return apiResponse;
         }
+        _expenseCategoryService.DeleteByIdAsync(request.Id);
         apiResponse.Message = "Delete Expense Category Success";
         return apiResponse;
     }

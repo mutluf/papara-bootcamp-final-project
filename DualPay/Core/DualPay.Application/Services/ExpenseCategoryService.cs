@@ -4,6 +4,8 @@ using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DualPay.Application.Services;
 
@@ -16,8 +18,7 @@ public class ExpenseCategoryService :IExpenseCategoryService
         _mapper = mapper;
         _expenseCategoryRepository = unitOfWork.GetRepository<ExpenseCategory>();
     }
-
-
+    
     public async Task<List<ExpenseCategoryDto>> GetAllAsync(params string[] includes)
     {
         List<ExpenseCategory> datas = await _expenseCategoryRepository.GetAllAsync(includes);
@@ -51,6 +52,8 @@ public class ExpenseCategoryService :IExpenseCategoryService
     {
         ExpenseCategory entity = _mapper.Map<ExpenseCategory>(expenseCategoryDto);
         ExpenseCategory data = await _expenseCategoryRepository.AddAsync(entity);
+        await _expenseCategoryRepository.SaveChangesAsync();
+        
         ExpenseCategoryDto mapped = _mapper.Map<ExpenseCategoryDto>(data);
         return mapped;
     }
@@ -58,11 +61,13 @@ public class ExpenseCategoryService :IExpenseCategoryService
     public async Task UpdateAsync(ExpenseCategoryDto expenseCategoryDto)
     {
         ExpenseCategory entity = _mapper.Map<ExpenseCategory>(expenseCategoryDto);
-        await _expenseCategoryRepository.AddAsync(entity);
+        _expenseCategoryRepository.Update(entity);
+        await _expenseCategoryRepository.SaveChangesAsync();
     }
     
     public async Task DeleteByIdAsync(int id)
     {
         await _expenseCategoryRepository.DeleteByIdAsync(id);
+        await _expenseCategoryRepository.SaveChangesAsync();
     }
 }

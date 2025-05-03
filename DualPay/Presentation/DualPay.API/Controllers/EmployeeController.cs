@@ -26,30 +26,33 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(GetEmployeeByIdRequest request)
+    public async Task<IActionResult> GetById([FromRoute] GetEmployeeByIdRequest request, [FromRoute] int id)
     {
+        request.Id = id;
         ApiResponse<EmployeeDetailResponse> result = await _mediator.Send(request);
         return Ok(result);
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create(CreateEmployeeCommandRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateEmployeeCommandRequest request)
     {
-        var result = await _mediator.Send(request);
-        return Ok(result);
+        ApiResponse<Application.Features.Commands.EmployeeResponse> apiResponse = await _mediator.Send(request);
+        return Ok(apiResponse);
     }
     
-    [HttpPut]
-    public async Task<IActionResult> Update(UpdateEmployeeCommandRequest request)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromBody] UpdateEmployeeCommandRequest request,  [FromRoute] int id)
     {
-        var result = await _mediator.Send(request);
-        return Ok(result);
+        request.Id= id;
+        ApiResponse apiResponse = await _mediator.Send(request);
+        return Ok(apiResponse);
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] DeleteEmployeeCommandRequest request)
+    public async Task<IActionResult> Delete([FromRoute] DeleteEmployeeCommandRequest request, [FromRoute] int id)
     {
-       await _mediator.Send(request);
-        return Ok();
+        request.Id = id;
+        ApiResponse apiResponse =await _mediator.Send(request);
+        return Ok(apiResponse);
     }
 }

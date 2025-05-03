@@ -2,6 +2,7 @@ using DualPay.Application.Common.Models;
 using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Application.Features.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ExpenseResponse = DualPay.Application.Features.Queries.ExpenseResponse;
 
@@ -9,6 +10,7 @@ namespace DualPay.API.Controllers;
 
 [ApiController]
 [Route("api/expense-categories")]
+//[Authorize(Roles = "Admin")]
 public class ExpenseCategoryController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -19,18 +21,19 @@ public class ExpenseCategoryController : ControllerBase
     }
 
     [HttpGet]
-    //[Authorize(Roles = "User,Admin")]
-    public async Task<IActionResult> GetAll(GetAllExpensesQueryRequest request)
+    //[Authorize(Roles = "Admin,User")]
+    public async Task<IActionResult> GetAll([FromQuery]GetAllExpenseCategoriesRequest request)
     {
         var publishService = new PublishService();
-        await publishService.Publish(new EventDto() {Id = 1});
-        ApiResponse<List<ExpenseResponse>> result = await _mediator.Send(request);
+        //await publishService.Publish(new EventDto() {Id = 1});
+        ApiResponse<List<ExpenseCategoryResponse>> result = await _mediator.Send(request);
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] GetExpenseCategoryByIdRequest request)
+    public async Task<IActionResult> GetById([FromRoute] GetExpenseCategoryByIdRequest request, [FromRoute]  int id)
     {
+        request.Id = id;
         ApiResponse<ExpenseCategoryResponse> result =await _mediator.Send(request);
         return Ok(result);
     }
@@ -38,21 +41,23 @@ public class ExpenseCategoryController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody]CreateExpenseCategoryCommandRequest request)
     {
-        var result = await _mediator.Send(request);
-        return Ok(result);
+        ApiResponse<ExpenseCategoryResponse> apiResponse = await _mediator.Send(request);
+        return Ok(apiResponse);
     }
     
-    [HttpPut]
-    public async Task<IActionResult> Update(UpdateExpenseCategoryCommandRequest request)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromBody] UpdateExpenseCategoryCommandRequest request, [FromRoute] int id)
     {
-        var result = await _mediator.Send(request);
-        return Ok(result);
+        request.Id = id;
+        ApiResponse apiResponse = await _mediator.Send(request);
+        return Ok(apiResponse);
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] DeleteExpenseCategoryCommandRequest request)
+    public async Task<IActionResult> Delete([FromRoute] DeleteExpenseCategoryCommandRequest request,  [FromRoute] int id)
     {
-        await _mediator.Send(request);
-        return Ok();
+        request.Id = id;
+        ApiResponse apiResponse= await _mediator.Send(request);
+        return Ok(apiResponse);
     }
 }

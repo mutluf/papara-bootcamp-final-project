@@ -22,7 +22,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return entity;
     }
    
-    public async Task DeleteByIdAsync(long id)
+    public async Task DeleteByIdAsync(int id)
     {
         var entity = await Table.FindAsync(id);
         if (entity != null)
@@ -50,16 +50,16 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await EntityFrameworkQueryableExtensions.ToListAsync(query);
     }
 
-    public async Task<TEntity> GetByIdAsync(long id, params string[] includes)
+    public async Task<TEntity> GetByIdAsync(int id, params string[] includes)
     {
         var query = Table.AsQueryable();
-        query = includes.Aggregate(query, (current, inc) => EntityFrameworkQueryableExtensions.Include(current, inc));
+        query = includes.Aggregate(query, (current, inc) => EntityFrameworkQueryableExtensions.Include(current, inc)).AsNoTracking();
         return await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(query, x => x.Id == id);
     }
 
     public async Task SaveChangesAsync()
     {
-        await _dbContext.SaveChangesAsync();
+        var data =await _dbContext.SaveChangesAsync();
     }
 
     public void Update(TEntity entity)

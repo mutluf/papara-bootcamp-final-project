@@ -22,9 +22,9 @@ public class UpdateExpenseCategoryCommandHandler: IRequestHandler<UpdateExpenseC
         if (expenseCategoryDto == null)
             return new ApiResponse("Category not found");
 
-        expenseCategoryDto.Description = request.Description;
-        expenseCategoryDto.Name = request.Name;
-        _expenseCategoryService.UpdateAsync(expenseCategoryDto);
+        expenseCategoryDto.Description = request.Description ?? expenseCategoryDto.Description;
+        expenseCategoryDto.Name = request.Name ?? expenseCategoryDto.Name;
+        await _expenseCategoryService.UpdateAsync(expenseCategoryDto);
         return new ApiResponse();
     }
 }
