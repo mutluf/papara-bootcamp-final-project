@@ -1,12 +1,9 @@
-using AutoMapper;
-using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
 using DualPay.Application.DTOs;
-using DualPay.Domain.Entities;
 using MediatR;
-namespace DualPay.Application.Features.Commands.ExpenseCategories;
 
+namespace DualPay.Application.Features.Commands.ExpenseCategories;
 public class UpdateExpenseCategoryCommandHandler: IRequestHandler<UpdateExpenseCategoryCommandRequest, ApiResponse>
 {
     private readonly IExpenseCategoryService _expenseCategoryService;
@@ -20,7 +17,7 @@ public class UpdateExpenseCategoryCommandHandler: IRequestHandler<UpdateExpenseC
     {
         ExpenseCategoryDto expenseCategoryDto = await _expenseCategoryService.GetByIdAsync(request.Id);
         if (expenseCategoryDto == null)
-            return new ApiResponse("Category not found");
+            return new ApiResponse("Expense category not found");
 
         expenseCategoryDto.Description = request.Description ?? expenseCategoryDto.Description;
         expenseCategoryDto.Name = request.Name ?? expenseCategoryDto.Name;

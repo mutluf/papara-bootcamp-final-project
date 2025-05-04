@@ -1,8 +1,6 @@
-using DualPay.Domain.Entities;
 using DualPay.Domain.Entities.Common;
 
 namespace DualPay.Application.Abstraction;
-
 public interface IUnitOfWork : IDisposable
 {
     Task Complete();

@@ -2,7 +2,6 @@ using System.Linq.Expressions;
 using DualPay.Domain.Entities.Common;
 
 namespace DualPay.Application.Abstraction;
-
 public interface IGenericRepository<TEntity> where TEntity : BaseEntity
 {
     Task SaveChangesAsync();

@@ -59,7 +59,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task SaveChangesAsync()
     {
-        var data =await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     public void Update(TEntity entity)

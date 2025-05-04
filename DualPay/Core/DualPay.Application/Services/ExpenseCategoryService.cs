@@ -4,11 +4,8 @@ using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace DualPay.Application.Services;
-
 public class ExpenseCategoryService :IExpenseCategoryService
 {
     private readonly IGenericRepository<ExpenseCategory> _expenseCategoryRepository;

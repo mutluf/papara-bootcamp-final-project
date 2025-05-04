@@ -3,7 +3,6 @@ using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
 
 namespace DualPay.Application.Abstraction.Services;
-
 public interface IExpenseCategoryService
 {
     Task<ExpenseCategoryDto> GetByIdAsync(int id, params string[] includes);

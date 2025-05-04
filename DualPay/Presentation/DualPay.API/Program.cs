@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
-using DualPay.API.Filters;
+using DualPay.API;
 using DualPay.Application;
 using DualPay.Infrastructure;
 using DualPay.Persistence;
@@ -13,8 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()  .AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});;
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -42,6 +42,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
+builder.Services.AddAPIServices();
 
 builder.Services.AddAuthentication(x =>
 {
@@ -62,8 +63,6 @@ builder.Services.AddAuthentication(x =>
     };
 
 });
-builder.Services.AddScoped<UserExpenseAuthorizationFilter>(); 
-builder.Services.AddScoped<AuthorizeOwnEmployeeFilter>();
 
 var app = builder.Build();
 
@@ -77,7 +76,7 @@ if (app.Environment.IsDevelopment())
 await app.UseIdentitySeederAsync();
 
 app.UseHttpsRedirection();
-//app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

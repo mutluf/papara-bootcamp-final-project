@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace DualPay.Application.Features.Commands;
-
 public class CreateEmployeeCommandHandler:IRequestHandler<CreateEmployeeCommandRequest,ApiResponse<EmployeeResponse>>
 {
     private IEmployeeService _employeeService;
@@ -23,7 +22,6 @@ public class CreateEmployeeCommandHandler:IRequestHandler<CreateEmployeeCommandR
 
     public async Task<ApiResponse<EmployeeResponse>> Handle(CreateEmployeeCommandRequest request, CancellationToken cancellationToken)
     {
-       // _employeeRepository = _unitOfWork.GetRepository<Employee>();
         var user = new AppUser
         {
             Name = request.Name,

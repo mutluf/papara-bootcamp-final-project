@@ -3,7 +3,6 @@ using DualPay.Application.Abstraction.Services;
 using DualPay.Application.DTOs.Reports;
 
 namespace DualPay.Application.Services;
-
 public class ReportService : IReportService
 {
     private readonly IReportRepository _reportRepository;

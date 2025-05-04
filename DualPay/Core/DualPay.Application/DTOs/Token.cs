@@ -1,5 +1,4 @@
 namespace DualPay.Application.DTOs;
-
 public class Token
 {
     public string AccessToken { get; set; }

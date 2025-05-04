@@ -8,7 +8,6 @@ using EmployeeResponse = DualPay.Application.Features.Queries.EmployeeResponse;
 using ExpenseResponse = DualPay.Application.Features.Commands.ExpenseCategories.ExpenseResponse;
 
 namespace DualPay.Application.Mapping;
-
 public class GeneralMapping :Profile
 {
     public GeneralMapping()

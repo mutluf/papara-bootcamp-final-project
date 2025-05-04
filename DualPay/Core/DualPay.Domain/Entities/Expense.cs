@@ -1,11 +1,9 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using DualPay.Domain.Entities.Common;
 using DualPay.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DualPay.Domain.Entities;
-
 public class Expense : BaseEntity
 {
     public string Description { get; set; }

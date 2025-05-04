@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 
 namespace DualPay.API;
-
 public class PublishService
 {
     public async Task Publish(EventDto eventDto)
@@ -23,8 +22,6 @@ public class PublishService
         var body = Encoding.UTF8.GetBytes(message);
    
         await channel.BasicPublishAsync(exchange: "", routingKey: "queue-test", body: body);
-
-           
     }
 }
 

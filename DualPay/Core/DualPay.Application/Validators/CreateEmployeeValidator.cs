@@ -2,7 +2,6 @@ using DualPay.Application.Features.Commands;
 using FluentValidation;
 
 namespace DualPay.Application.Validators;
-
 public class CreateEmployeeValidator: AbstractValidator<CreateEmployeeCommandRequest>
 {
     public CreateEmployeeValidator()

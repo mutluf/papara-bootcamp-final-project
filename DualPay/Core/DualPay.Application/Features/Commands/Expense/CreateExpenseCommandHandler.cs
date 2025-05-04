@@ -1,11 +1,10 @@
-using System.Security.Claims;
 using AutoMapper;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
 using DualPay.Application.DTOs;
 using MediatR;
-namespace DualPay.Application.Features.Commands.ExpenseCategories;
 
+namespace DualPay.Application.Features.Commands.ExpenseCategories;
 public class CreateExpenseCommandHandler: IRequestHandler<CreateExpenseCommandRequest, ApiResponse<ExpenseResponse>>
 {
     private readonly IMapper _mapper;

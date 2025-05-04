@@ -2,7 +2,6 @@ using DualPay.Application.Abstraction.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DualPay.API.Controllers;
-
 [ApiController]
 [Route("api/reports")]
 public class ReportController : ControllerBase

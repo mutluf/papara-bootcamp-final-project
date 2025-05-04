@@ -4,13 +4,11 @@ using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Behaviours;
 using DualPay.Application.Mapping;
 using DualPay.Application.Services;
-using DualPay.Application.Validators;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DualPay.Application;
-
 public static class ServiceRegistiration
 {
     public static void AddApplicationServices(this IServiceCollection services)

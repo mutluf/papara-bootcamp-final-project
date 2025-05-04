@@ -6,7 +6,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace DualPay.Application.Services;
-
 public class AppUserService : IAppUserService
 {
     readonly UserManager<AppUser> _userManager;
@@ -64,11 +63,4 @@ public class LoginAppUserRequest
 {
     public string UsernameOrEmail { get; set; }
     public string Password { get; set; }
-}
-
-public class LoginAppUserResponse
-{
-    public Token Token { get; set; }
-    public string Message { get; set; }
-    public AppUser User { get; set; }
 }

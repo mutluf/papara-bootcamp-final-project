@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DualPay.Domain.Entities;
-
 public class Payment :BaseEntity
 {
     public string Name { get; set; }
@@ -17,7 +16,6 @@ public class Payment :BaseEntity
     public int FromAccount { get; set; }
     public int ToAccount { get; set; }
     public string ReferenceNumber { get; set; }
-
 }
 
 public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
@@ -42,7 +40,5 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
             .HasForeignKey(x => x.PaymentMethodId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
-        
-        
     }
 }

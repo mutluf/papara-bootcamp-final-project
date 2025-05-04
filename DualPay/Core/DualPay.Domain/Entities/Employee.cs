@@ -32,6 +32,5 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             .WithOne(x => x.Employee)
             .HasForeignKey(x=> x.EmployeeId)
             .OnDelete(DeleteBehavior.Restrict);
-
     }
 }

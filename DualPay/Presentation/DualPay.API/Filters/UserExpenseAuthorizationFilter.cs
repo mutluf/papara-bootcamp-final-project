@@ -1,7 +1,5 @@
 using System.Security.Claims;
-using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
-using DualPay.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

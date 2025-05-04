@@ -2,7 +2,6 @@ using DualPay.Application.Features.Commands.ExpenseCategories;
 using FluentValidation;
 
 namespace DualPay.Application.Validators;
-
 public class UpdateExpenseValidator: AbstractValidator<UpdateExpenseCommandRequest>
 {
     public UpdateExpenseValidator()

@@ -1,5 +1,4 @@
 namespace DualPay.Application.DTOs;
-
 public class ExpenseCategoryDto
 {
     public int Id { get; set; }

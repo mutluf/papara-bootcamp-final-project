@@ -1,11 +1,9 @@
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
 using DualPay.Application.DTOs;
-using DualPay.Domain.Entities;
 using MediatR;
 
 namespace DualPay.Application.Features.Commands.ExpenseCategories;
-
 public class DeleteExpenseCategoryCommandHandler:IRequestHandler<DeleteExpenseCategoryCommandRequest,ApiResponse>
 {
     private readonly IExpenseCategoryService  _expenseCategoryService;

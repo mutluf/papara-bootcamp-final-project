@@ -2,15 +2,11 @@ using DualPay.Application.Common.Models;
 using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Application.Features.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ExpenseResponse = DualPay.Application.Features.Queries.ExpenseResponse;
 
 namespace DualPay.API.Controllers;
-
 [ApiController]
 [Route("api/expense-categories")]
-//[Authorize(Roles = "Admin")]
 public class ExpenseCategoryController : ControllerBase
 {
     private readonly IMediator _mediator;

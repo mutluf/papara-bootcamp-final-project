@@ -1,7 +1,6 @@
 using DualPay.Domain.Entities;
 
 namespace DualPay.Application.DTOs;
-
 public class ExpenseDto
 {
     public int Id { get; set; }

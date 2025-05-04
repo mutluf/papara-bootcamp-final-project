@@ -2,10 +2,9 @@ using AutoMapper;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
 using DualPay.Application.DTOs;
-using DualPay.Domain.Entities;
 using MediatR;
-namespace DualPay.Application.Features.Commands;
 
+namespace DualPay.Application.Features.Commands;
 public class UpdateEmployeeCommandHandler: IRequestHandler<UpdateEmployeeCommandRequest, ApiResponse>
 {
     private IEmployeeService _employeeService;

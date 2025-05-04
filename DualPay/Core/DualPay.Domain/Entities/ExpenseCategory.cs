@@ -1,10 +1,8 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using DualPay.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DualPay.Domain.Entities;
-
 public class ExpenseCategory: BaseEntity
 {
     public string? Name { get; set; }

@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace DualPay.Application.Features.Commands;
-
 public class RegisterAppUserCommandHandler:IRequestHandler<RegisterAppUserCommandRequest,ApiResponse>
 {
     private readonly UserManager<AppUser> _userManager;

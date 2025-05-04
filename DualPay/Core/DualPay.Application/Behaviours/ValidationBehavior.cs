@@ -3,7 +3,6 @@ using MediatR;
 using ValidationException = FluentValidation.ValidationException;
 
 namespace DualPay.Application.Behaviours;
-
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 {
     private readonly IValidator<TRequest>[] _validators;

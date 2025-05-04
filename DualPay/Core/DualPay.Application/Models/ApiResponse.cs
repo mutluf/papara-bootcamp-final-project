@@ -2,7 +2,6 @@ using System.Text.Json;
 using Mediator.Net.Contracts;
 
 namespace DualPay.Application.Common.Models;
-
 public class ApiResponse<T> : IResponse
 {
     public bool Success { get; set; }
