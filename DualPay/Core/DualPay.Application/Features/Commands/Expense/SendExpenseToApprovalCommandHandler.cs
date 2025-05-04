@@ -6,16 +6,16 @@ using MediatR;
 
 namespace DualPay.Application.Features.Commands.Expense;
 
-public class SubmitExpenseForApprovalCommandHandler : IRequestHandler<SubmitExpenseForApprovalCommandRequest,ApiResponse>
+public class SendExpenseToApprovalCommandHandler : IRequestHandler<SendExpenseToApprovalCommandRequest,ApiResponse>
 {
     private IExpenseService  _expenseService;
 
-    public SubmitExpenseForApprovalCommandHandler(IExpenseService expenseService)
+    public SendExpenseToApprovalCommandHandler(IExpenseService expenseService)
     {
         _expenseService = expenseService;
     }
 
-    public async Task<ApiResponse> Handle(SubmitExpenseForApprovalCommandRequest request, CancellationToken cancellationToken)
+    public async Task<ApiResponse> Handle(SendExpenseToApprovalCommandRequest request, CancellationToken cancellationToken)
     {
         ExpenseDto dto = await _expenseService.GetByIdAsync(request.ExpenseId);
         if (dto == null)
@@ -35,9 +35,8 @@ public class SubmitExpenseForApprovalCommandHandler : IRequestHandler<SubmitExpe
 }
 
 
-public class SubmitExpenseForApprovalCommandRequest:IRequest<ApiResponse>
+public class SendExpenseToApprovalCommandRequest:IRequest<ApiResponse>
 {
     public int ExpenseId { get; set; }
-    public ExpenseStatus Status { get; set; }
 }
 

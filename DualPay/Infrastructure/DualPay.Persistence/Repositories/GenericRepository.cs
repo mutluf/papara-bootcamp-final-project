@@ -73,4 +73,60 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         query = includes.Aggregate(query, (current, inc) => EntityFrameworkQueryableExtensions.Include(current, inc));
         return await EntityFrameworkQueryableExtensions.ToListAsync(query);
     }
+    
+    public async Task<List<TEntity>> GetByFilterAsync(Dictionary<string, object> filters, params string[] includes)
+    {
+        var query = Table.AsQueryable();
+        if (filters != null && filters.Any())
+        {
+            foreach (var filter in filters)
+            {
+                query = ApplyFilter(query, filter.Key, filter.Value);
+            }
+        }
+        
+        if (includes.Any())
+        {
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+        }
+
+        return await query.ToListAsync();
+    }
+    private IQueryable<TEntity> ApplyFilter(IQueryable<TEntity> query, string fieldName, object value)
+    {
+        var property = typeof(TEntity).GetProperty(fieldName);
+        if (property != null)
+        {
+            var propertyType = property.PropertyType;
+            if (fieldName.Equals("Status", StringComparison.OrdinalIgnoreCase) && propertyType == typeof(string))
+            {
+                var enumStringValue = value.ToString();
+                query = query.Where(x => EF.Property<string>(x, fieldName) == enumStringValue);
+            }
+            else if (propertyType == typeof(string))
+            {
+                query = query.Where(x => EF.Functions.Like(EF.Property<string>(x, fieldName), $"%{value}%"));
+            }
+            else if (propertyType.IsEnum)
+            {
+                var enumType = property.PropertyType;
+                if (Enum.IsDefined(enumType, value))
+                {
+                    query = query.Where(x => EF.Property<int>(x, fieldName) == (int)Enum.Parse(enumType, value.ToString()));
+                }
+            }
+            else if (propertyType == typeof(int) || propertyType == typeof(double) || propertyType == typeof(decimal))
+            {
+                query = query.Where(x => EF.Property<object>(x, fieldName).Equals(value));
+            }
+            else
+            {
+                query = query.Where(x => EF.Property<object>(x, fieldName).Equals(value));
+            }
+        }
+        return query;
+    }
 }

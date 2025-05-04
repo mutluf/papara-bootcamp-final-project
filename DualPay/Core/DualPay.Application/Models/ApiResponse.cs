@@ -39,11 +39,11 @@ public class ApiResponse
     {
         if (string.IsNullOrWhiteSpace(message))
         {
-            Success = true;
+            Success = false;
         }
         else
         {
-            Success = false;
+            Success = true;
             Message = message;
         }
     }

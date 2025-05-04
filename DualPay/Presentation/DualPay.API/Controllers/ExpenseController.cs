@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using DualPay.API.Attributes;
 using DualPay.Application.Common.Models;
+using DualPay.Application.Features.Commands.Expense;
 using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Application.Features.Queries;
 using MediatR;
@@ -69,5 +70,34 @@ public class ExpenseController : ControllerBase
         request.Id = id;
         ApiResponse apiResponse = await _mediator.Send(request);
         return Ok(apiResponse);
+    }
+    
+    [HttpPost("submit/{id}")]
+    [UserExpenseAuthorization]
+    public async Task<IActionResult> SendExpenseToApproval([FromBody] SendExpenseToApprovalCommandRequest request, [FromRoute] int id)
+    {
+        request.ExpenseId = id;
+        ApiResponse response = await _mediator.Send(request);
+        return Ok(response);
+    }
+    
+    [HttpGet("filter")]
+    public async Task<IActionResult> GetFilteredExpenses([FromQuery] string[] filters, [FromQuery] string[] includes)
+    {
+        var filterDictionary = new Dictionary<string, object>();
+
+        foreach (var filter in filters)
+        {
+            var parts = filter.Split('=');
+            if (parts.Length == 2)
+            {
+                filterDictionary.Add(parts[0], parts[1]);
+            }
+        }
+        
+        var query = new GetFilteredExpensesQuery(filterDictionary, includes.ToList());
+        var expenses = await _mediator.Send(query);
+        
+        return Ok(expenses);
     }
 }

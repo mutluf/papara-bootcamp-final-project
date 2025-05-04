@@ -13,4 +13,5 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     void Update(TEntity entity);
     void Delete(TEntity entity);
     Task DeleteByIdAsync(int id);
+    Task<List<TEntity>> GetByFilterAsync(Dictionary<string, object> filters, params string[] includes);
 }

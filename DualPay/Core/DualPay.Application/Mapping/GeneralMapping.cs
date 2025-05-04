@@ -25,7 +25,7 @@ public class GeneralMapping :Profile
         CreateMap<EmployeeDto, EmployeeResponse>();
         CreateMap<EmployeeDto, EmployeeDetailResponse>();
         CreateMap<EmployeeDto, Employee>();
-        CreateMap< Employee, EmployeeDto>()
+        CreateMap<Employee, EmployeeDto>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.AppUser.Name))
             .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => src.AppUser.Surname));
     }

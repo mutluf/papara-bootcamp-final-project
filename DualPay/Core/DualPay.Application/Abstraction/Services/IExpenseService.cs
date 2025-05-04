@@ -12,4 +12,5 @@ public interface IExpenseService
     Task<ExpenseDto> AddAsync(ExpenseDto expenseDto);
     Task UpdateAsync(ExpenseDto expenseDto);
     Task DeleteByIdAsync(int id);
+    Task<List<ExpenseDto>> GetByFilterAsync(Dictionary<string, object> filters, params string[] includes);
 }

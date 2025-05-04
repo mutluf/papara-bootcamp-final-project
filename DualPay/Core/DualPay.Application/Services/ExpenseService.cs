@@ -54,11 +54,18 @@ public class ExpenseService :IExpenseService
     {
         Expense expense = _mapper.Map<Expense>(expenseDto);
         _expenseRepository.Update(expense);
+        _expenseRepository.SaveChangesAsync();
     }
 
 
     public async Task DeleteByIdAsync(int id)
     {
         await _expenseRepository.DeleteByIdAsync(id);
+    }
+
+    public async Task<List<ExpenseDto>> GetByFilterAsync(Dictionary<string, object> filters, params string[] includes)
+    {
+        List<Expense> datas =await _expenseRepository.GetByFilterAsync(filters, includes);
+        return _mapper.Map<List<ExpenseDto>>(datas);
     }
 }
