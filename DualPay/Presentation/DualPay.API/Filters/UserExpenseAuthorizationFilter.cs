@@ -26,7 +26,7 @@ public class UserExpenseAuthorizationFilter : IAsyncActionFilter
             return;
         }
         var employees = await _employeeService.Where(e=>e.UserId == Int32.Parse(userId));
-        if (employees[0].Id == null)
+        if (employees.Count() == 0)
         {
             context.Result = new ForbidResult();
             return;

@@ -32,7 +32,7 @@ public class ExpenseController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin,User")]
-    [UserExpenseAuthorization]
+    [AuthorizeOwnEmployee]
     public async Task<IActionResult> GetById([FromRoute] GetExpenseByIdRequest  request, [FromRoute] int id)
     {
         request.Id = id;
@@ -75,6 +75,23 @@ public class ExpenseController : ControllerBase
     [HttpPost("submit/{id}")]
     [UserExpenseAuthorization]
     public async Task<IActionResult> SendExpenseToApproval([FromBody] SendExpenseToApprovalCommandRequest request, [FromRoute] int id)
+    {
+        request.ExpenseId = id;
+        ApiResponse response = await _mediator.Send(request);
+        return Ok(response);
+    }
+    [HttpPost("approve/{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ApproveExpenseAsync([FromBody] ApproveExpenseCommandRequest request, [FromRoute] int id)
+    {
+        request.ExpenseId = id;
+        ApiResponse response = await _mediator.Send(request);
+        return Ok(response);
+    }
+    
+    [HttpPost("reject/{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> RejectExpenseAsync([FromBody] RejectExpenseCommandRequest request, [FromRoute] int id)
     {
         request.ExpenseId = id;
         ApiResponse response = await _mediator.Send(request);

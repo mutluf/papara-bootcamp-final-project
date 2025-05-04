@@ -8,11 +8,13 @@ public class AuthorizeOwnEmployeeFilter : IAsyncActionFilter
 {
     private readonly IEmployeeService _employeeService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IExpenseService _expenseService;
 
-    public AuthorizeOwnEmployeeFilter(IHttpContextAccessor httpContextAccessor, IEmployeeService employeeService)
+    public AuthorizeOwnEmployeeFilter(IHttpContextAccessor httpContextAccessor, IEmployeeService employeeService, IExpenseService expenseService)
     {
         _httpContextAccessor = httpContextAccessor;
         _employeeService = employeeService;
+        _expenseService = expenseService;
     }
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -24,27 +26,27 @@ public class AuthorizeOwnEmployeeFilter : IAsyncActionFilter
             context.Result = new UnauthorizedResult();
             return;
         }
-        
-        if (!context.ActionArguments.TryGetValue("id", out var idObj) || idObj is not int employeeId)
+        var isAdmin = _httpContextAccessor.HttpContext.User.IsInRole("Admin");
+        var employees = await _employeeService.Where(e=>e.UserId == Int32.Parse(userId));
+        if (isAdmin)
         {
-            context.Result = new BadRequestObjectResult("Employee ID is required.");
+            await next();
             return;
         }
-
-        var employee = await _employeeService.GetByIdAsync(employeeId);
-        if (employee == null)
+      
+        if (!employees.Any())
         {
             context.Result = new NotFoundObjectResult("Employee not found.");
             return;
         }
-
-        var isAdmin = _httpContextAccessor.HttpContext.User.IsInRole("Admin");
-        if (!isAdmin && employee.UserId.ToString() != userId)
+    
+        var expenseId = (int)context.ActionArguments["id"];
+        var expense = await _expenseService.GetByIdAsync(expenseId);
+        if (expense == null || employees.Count() > 0 && expense?.EmployeeId != employees[0].Id)
         {
             context.Result = new ForbidResult();
             return;
         }
-
         await next();
     }
 }
