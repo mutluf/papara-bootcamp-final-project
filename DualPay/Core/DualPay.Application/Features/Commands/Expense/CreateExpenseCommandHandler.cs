@@ -2,6 +2,7 @@ using AutoMapper;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
 using DualPay.Application.DTOs;
+using DualPay.Application.Features.Queries;
 using MediatR;
 
 namespace DualPay.Application.Features.Commands.ExpenseCategories;
@@ -39,11 +40,4 @@ public class CreateExpenseCommandRequest: IRequest<ApiResponse<ExpenseResponse>>
     public decimal Amount { get; set; }
     public string? DocumentUrl { get; set; }
     public string? Location { get; set; }
-}
-
-public class ExpenseResponse
-{
-    public string Description { get; set; }
-    public int ExpenseCategoryId { get; set; }
-    public decimal Amount { get; set; }
 }

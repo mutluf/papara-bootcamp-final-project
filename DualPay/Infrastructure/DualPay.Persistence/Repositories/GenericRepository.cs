@@ -54,7 +54,8 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         var query = Table.AsQueryable();
         query = includes.Aggregate(query, (current, inc) => EntityFrameworkQueryableExtensions.Include(current, inc)).AsNoTracking();
-        return await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(query, x => x.Id == id);
+        var data = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(query, x => x.Id == id);
+        return data;
     }
 
     public async Task SaveChangesAsync()

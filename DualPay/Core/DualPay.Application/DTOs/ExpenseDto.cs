@@ -12,7 +12,7 @@ public class ExpenseDto
     public ExpenseStatus Status { get; set; }
     public string? DocumentUrl { get; set; }
     public string Location { get; set; }
-    public int ? EmployeeId { get; set; }
+    public int EmployeeId { get; set; }
     public DateTime? ApprovedDate { get; set; }
     public DateTime? RejectedDate { get; set; }
     public string? ApprovedBy { get; set; }

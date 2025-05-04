@@ -48,6 +48,26 @@ public class AppUserService : IAppUserService
 
         return new Token();
     }
+    public async Task<bool> TransferBalanceAsync(string fromAccount, string toAccount, decimal amount)
+    {
+        var fromUser = _userManager.Users.FirstOrDefault(u => u.AccountNumber == fromAccount);
+        var toUser = _userManager.Users.FirstOrDefault(u => u.AccountNumber == toAccount);
+
+        if (fromUser == null || toUser == null)
+            return false;
+
+        if (fromUser.Balance < amount)
+            return false;
+        
+        fromUser.Balance -= amount;
+        toUser.Balance += amount;
+        
+        var updateFrom = await _userManager.UpdateAsync(fromUser);
+        var updateTo = await _userManager.UpdateAsync(toUser);
+
+        return updateFrom.Succeeded && updateTo.Succeeded;
+    }
+
 }
 
 public class CreateAppUserRequest :IRequest<Token>

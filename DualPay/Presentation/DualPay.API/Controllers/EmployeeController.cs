@@ -42,7 +42,7 @@ public class EmployeeController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CreateEmployeeCommandRequest request)
     {
-        ApiResponse<Application.Features.Commands.EmployeeResponse> apiResponse = await _mediator.Send(request);
+        ApiResponse<EmployeeResponse> apiResponse = await _mediator.Send(request);
         return Ok(apiResponse);
     }
     

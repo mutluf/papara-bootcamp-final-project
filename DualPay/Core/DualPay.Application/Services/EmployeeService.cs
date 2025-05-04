@@ -42,7 +42,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<EmployeeDto> GetByIdAsync(int id, params string[] includes)
     {
-        Employee data = await _employeeRepository.GetByIdAsync(id,includes);
+        Employee data = await  _unitOfWork.GetRepository<Employee>().GetByIdAsync(id,includes);
         return _mapper.Map<EmployeeDto>(data);
     }
 

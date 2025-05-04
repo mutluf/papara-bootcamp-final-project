@@ -1,6 +1,7 @@
 using AutoMapper;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
+using DualPay.Application.Features.Queries;
 using DualPay.Domain.Entities;
 using DualPay.Domain.Entities.Identity;
 using MediatR;
@@ -80,10 +81,4 @@ public class CreateEmployeeCommandRequest : IRequest<ApiResponse<EmployeeRespons
     public string AccountNumber { get; set; }
     public string IdentityNumber { get; set; }
 
-}
-public class EmployeeResponse
-{
-    public string Name { get; set; }
-    public string Surname { get; set; }
-    public string IdentityNumber { get; set; }
 }

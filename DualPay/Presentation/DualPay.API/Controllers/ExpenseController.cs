@@ -50,7 +50,7 @@ public class ExpenseController : ControllerBase
             return Unauthorized(new ApiResponse("Unauthorized."));
         }
         request.UserId = Int32.Parse(userId);
-        ApiResponse<Application.Features.Commands.ExpenseCategories.ExpenseResponse> apiResponse = await _mediator.Send(request);
+        ApiResponse<ExpenseResponse> apiResponse = await _mediator.Send(request);
         return Ok(apiResponse);
     }
     

@@ -1,23 +1,29 @@
-using PaymentWorker.Consumers;
+using DualPay.Application.Abstraction;
+using DualPay.Infrastructure.Messaging.Consumers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
-namespace PaymentWorker;
+namespace DualPay.Infrastructure;
 
-public class Worker : BackgroundService
+public class WorkerService : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
-    private readonly ILogger<ExpenseApprovedConsumer> _consumerLogger;
+    private readonly ILogger<WorkerService> _logger;
+    private readonly ILogger<PaymentCompletedConsumer> _consumerLogger;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     private IConnection? _connection;
     private IChannel? _channel;
-    private readonly ExpenseApprovedConsumer _consumer;
+    private readonly PaymentCompletedConsumer _consumer;
 
-    public Worker(
-        ILogger<Worker> logger,
-        ILogger<ExpenseApprovedConsumer> consumerLogger)
+    public WorkerService(
+        ILogger<WorkerService> logger,
+        ILogger<PaymentCompletedConsumer> consumerLogger, IServiceScopeFactory serviceScopeFactory)
     {
         _logger = logger;
         _consumerLogger = consumerLogger;
-        _consumer = new ExpenseApprovedConsumer(_consumerLogger);
+        _serviceScopeFactory = serviceScopeFactory;
+        _consumer = new PaymentCompletedConsumer(_consumerLogger,_serviceScopeFactory);
     }
 
     public override async Task StartAsync(CancellationToken cancellationToken)

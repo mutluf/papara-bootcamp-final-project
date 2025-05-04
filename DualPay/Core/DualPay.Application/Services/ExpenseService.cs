@@ -11,8 +11,10 @@ public class ExpenseService :IExpenseService
 {
     private readonly IGenericRepository<Expense> _expenseRepository;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
     public ExpenseService(IUnitOfWork unitOfWork, IMapper mapper)
     {
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _expenseRepository = unitOfWork.GetRepository<Expense>();
     }
@@ -37,7 +39,7 @@ public class ExpenseService :IExpenseService
 
     public async Task<ExpenseDto> GetByIdAsync(int id, params string[] includes)
     {
-        Expense data = await _expenseRepository.GetByIdAsync(id);
+        Expense data = await _unitOfWork.GetRepository<Expense>().GetByIdAsync(id);
         return _mapper.Map<ExpenseDto>(data);
     }
 
@@ -53,8 +55,8 @@ public class ExpenseService :IExpenseService
     public async Task UpdateAsync(ExpenseDto expenseDto)
     {
         Expense expense = _mapper.Map<Expense>(expenseDto);
-        _expenseRepository.Update(expense);
-        _expenseRepository.SaveChangesAsync();
+        _unitOfWork.GetRepository<Expense>().Update(expense);
+        await _unitOfWork.Complete();
     }
 
 

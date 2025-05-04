@@ -64,7 +64,9 @@ public class IdentitySeeder
             UserName = email,
             Email = email,
             EmailConfirmed = true,
-            PhoneNumber = ""
+            PhoneNumber = "1555555555",
+            AccountNumber = "1111111111",
+            Balance = 100000
         };
 
         var result = await _userManager.CreateAsync(user, password);
@@ -99,7 +101,9 @@ public class IdentitySeeder
             UserName = email,
             Email = email,
             EmailConfirmed = true,
-            PhoneNumber = "1111111111"
+            PhoneNumber = "5555555555",
+            AccountNumber = "2222222222",
+            Balance = 2000
         };
 
         var result = await _userManager.CreateAsync(user, password);
@@ -112,8 +116,8 @@ public class IdentitySeeder
             {
                 UserId = user.Id,
                 IdentityNumber = "12345678912",
-                PhoneNumber = "1234567891",
-                AccountNumber = "1234567891"
+                PhoneNumber = "5555555555",
+                AccountNumber = "2222222222",
             };
 
             await _unitOfWork.GetRepository<Employee>().AddAsync(employee);

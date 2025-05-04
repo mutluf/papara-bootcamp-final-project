@@ -4,8 +4,6 @@ using DualPay.Application.Features.Commands;
 using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Application.Features.Queries;
 using DualPay.Domain.Entities;
-using EmployeeResponse = DualPay.Application.Features.Queries.EmployeeResponse;
-using ExpenseResponse = DualPay.Application.Features.Queries.ExpenseResponse;
 
 namespace DualPay.Application.Mapping;
 public class GeneralMapping :Profile
@@ -17,7 +15,7 @@ public class GeneralMapping :Profile
         CreateMap<ExpenseCategoryDto, ExpenseCategory>().ReverseMap();
         
         CreateMap<CreateExpenseCommandRequest, ExpenseDto>();
-        CreateMap<ExpenseDto, ExpenseResponse>();
+        CreateMap<ExpenseDto, ExpenseResponse>().ReverseMap();
         CreateMap<ExpenseDto, ExpenseDetailResponse>();
         CreateMap<ExpenseDto, Expense>().ReverseMap();
         
