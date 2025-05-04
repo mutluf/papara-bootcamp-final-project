@@ -45,6 +45,7 @@ public class ExpenseService :IExpenseService
     {
         Expense expense = _mapper.Map<Expense>(expenseDto);
         Expense data = await _expenseRepository.AddAsync(expense);
+        await _expenseRepository.SaveChangesAsync();
         ExpenseDto dto = _mapper.Map<ExpenseDto>(data);
         return dto;
     }

@@ -59,6 +59,8 @@ public class IdentitySeeder
 
         var user = new AppUser
         {
+            Name = "Admin",
+            Surname = "Initial",
             UserName = email,
             Email = email,
             EmailConfirmed = true,
@@ -92,6 +94,8 @@ public class IdentitySeeder
 
         var user = new AppUser
         {
+            Name = "Employee",
+            Surname = "Initial",
             UserName = email,
             Email = email,
             EmailConfirmed = true,

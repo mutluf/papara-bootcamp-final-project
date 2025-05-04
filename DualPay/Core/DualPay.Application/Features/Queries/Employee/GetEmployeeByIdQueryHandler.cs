@@ -3,6 +3,7 @@ using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
 using DualPay.Application.DTOs;
 using DualPay.Domain.Entities;
+using DualPay.Domain.Entities.Identity;
 using MediatR;
 
 namespace DualPay.Application.Features.Queries;
@@ -20,7 +21,7 @@ public class GetEmployeeByIdQueryHandler: IRequestHandler<GetEmployeeByIdRequest
 
     public async Task<ApiResponse<EmployeeDetailResponse>> Handle(GetEmployeeByIdRequest request, CancellationToken cancellationToken)
     {
-        EmployeeDto employee = await _employeeService.GetByIdAsync(request.Id);
+        EmployeeDto employee = await _employeeService.GetByIdAsync(request.Id, nameof(AppUser));
         EmployeeDetailResponse mapped = _mapper.Map<EmployeeDetailResponse>(employee);
         ApiResponse<EmployeeDetailResponse> response = new ApiResponse<EmployeeDetailResponse>(mapped);
         response.Message = "Success";

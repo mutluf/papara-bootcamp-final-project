@@ -1,6 +1,7 @@
 using DualPay.Application.Abstraction;
 using DualPay.Application.DTOs;
 using DualPay.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DualPay.API.Controllers;
@@ -17,6 +18,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateUser(CreateAppUserRequest request)
     {
         await _appUserService.CreateUserAsync(request);

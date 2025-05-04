@@ -1,7 +1,9 @@
+using DualPay.API.Attributes;
 using DualPay.Application.Common.Models;
 using DualPay.Application.Features.Commands;
 using DualPay.Application.Features.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EmployeeResponse = DualPay.Application.Features.Queries.EmployeeResponse;
 
@@ -19,6 +21,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll([FromQuery] GetAllEmployeesQueryRequest request)
     {
         ApiResponse<List<EmployeeResponse>> result =await _mediator.Send(request);
@@ -26,6 +29,8 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,User")]
+    [AuthorizeOwnEmployee]
     public async Task<IActionResult> GetById([FromRoute] GetEmployeeByIdRequest request, [FromRoute] int id)
     {
         request.Id = id;
@@ -34,6 +39,7 @@ public class EmployeeController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CreateEmployeeCommandRequest request)
     {
         ApiResponse<Application.Features.Commands.EmployeeResponse> apiResponse = await _mediator.Send(request);
@@ -41,6 +47,7 @@ public class EmployeeController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update([FromBody] UpdateEmployeeCommandRequest request,  [FromRoute] int id)
     {
         request.Id= id;
@@ -49,6 +56,7 @@ public class EmployeeController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete([FromRoute] DeleteEmployeeCommandRequest request, [FromRoute] int id)
     {
         request.Id = id;

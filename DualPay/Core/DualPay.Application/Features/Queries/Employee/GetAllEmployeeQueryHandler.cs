@@ -19,7 +19,7 @@ public class GetAllEmployeeQueryHandler : IRequestHandler<GetAllEmployeesQueryRe
 
     public async Task<ApiResponse<List<EmployeeResponse>>> Handle(GetAllEmployeesQueryRequest request, CancellationToken cancellationToken)
     {
-        List<EmployeeDto> employees =await _employeeService.GetAllAsync();
+        List<EmployeeDto> employees =await _employeeService.GetAllAsync("AppUser");
         List<EmployeeResponse> mapped = _mapper.Map<List<EmployeeResponse>>(employees);
         return new ApiResponse<List<EmployeeResponse>>(mapped);
     }

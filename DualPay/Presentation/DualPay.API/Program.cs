@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using DualPay.API.Filters;
 using DualPay.Application;
 using DualPay.Infrastructure;
 using DualPay.Persistence;
@@ -61,6 +62,9 @@ builder.Services.AddAuthentication(x =>
     };
 
 });
+builder.Services.AddScoped<UserExpenseAuthorizationFilter>(); 
+builder.Services.AddScoped<AuthorizeOwnEmployeeFilter>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
