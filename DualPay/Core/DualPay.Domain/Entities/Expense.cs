@@ -46,11 +46,11 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
         builder.Property(x => x.Amount).IsRequired().HasColumnType("decimal(18,2)");
         builder.Property(x => x.Description).IsRequired().HasMaxLength(150);
         builder.Property(x => x.Location).IsRequired().HasMaxLength(150);
-        builder.Property(x => x.Status).IsRequired().HasDefaultValue(ExpenseStatus.Pending);
+        builder.Property(x => x.Status).IsRequired()
+            .HasConversion<string>() 
+            .HasDefaultValue(ExpenseStatus.Pending);
         builder.Property(x => x.DocumentUrl).IsRequired(false).HasMaxLength(100);
         builder.Property(x => x.RejectionReason).HasMaxLength(100);
-        builder.Property(x => x.Status)
-            .HasDefaultValue(ExpenseStatus.Pending);
 
         builder.HasOne(x => x.ExpenseCategory)
             .WithMany(x => x.Expenses)

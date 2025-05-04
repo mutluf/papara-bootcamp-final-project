@@ -3,6 +3,7 @@ namespace DualPay.Domain.Entities;
 public enum ExpenseStatus
 {
     Pending = 0,
-    Approved = 1,
-    Rejected = 2
+    InProgress = 1,
+    Approved = 2,
+    Rejected = 3
 }
