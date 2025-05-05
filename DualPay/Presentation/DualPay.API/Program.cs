@@ -41,7 +41,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 builder.Services.AddPersistenceServices();
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddAPIServices();
 

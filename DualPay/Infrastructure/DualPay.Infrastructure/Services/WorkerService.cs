@@ -28,13 +28,12 @@ public class WorkerService : BackgroundService
 
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
-        var factory = new ConnectionFactory
-        {
-            HostName = "localhost",
-            Port = 5672,
-            UserName = "guest",
-            Password = "guest"
-        };
+        var rabbitMq = Configuration.RabbitMqSettings;
+        ConnectionFactory factory = new();
+        factory.HostName = rabbitMq.Host;
+        factory.Port = rabbitMq.Port;
+        factory.UserName = rabbitMq.UserName;
+        factory.Password = rabbitMq.Password;
 
         _connection = await factory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();

@@ -5,30 +5,26 @@ namespace PaymentWorker;
 
 public class Worker : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
     private readonly ILogger<ExpenseApprovedConsumer> _consumerLogger;
     private IConnection? _connection;
     private IChannel? _channel;
     private readonly ExpenseApprovedConsumer _consumer;
 
     public Worker(
-        ILogger<Worker> logger,
         ILogger<ExpenseApprovedConsumer> consumerLogger)
     {
-        _logger = logger;
         _consumerLogger = consumerLogger;
         _consumer = new ExpenseApprovedConsumer(_consumerLogger);
     }
 
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
-        var factory = new ConnectionFactory
-        {
-            HostName = "localhost",
-            Port = 5672,
-            UserName = "guest",
-            Password = "guest"
-        };
+        var rabbitMq = Configuration.RabbitMqSettings;
+        ConnectionFactory factory = new();
+        factory.HostName = rabbitMq.Host;
+        factory.Port = rabbitMq.Port;
+        factory.UserName = rabbitMq.UserName;
+        factory.Password = rabbitMq.Password;
 
         _connection = await factory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();

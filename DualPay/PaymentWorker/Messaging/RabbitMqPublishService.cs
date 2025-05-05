@@ -8,11 +8,13 @@ public class RabbitMqPublishService : IEventPublishService
 {
     public async Task PublishAsync<T>(T @event) where T : IApplicationEvent
     {
+        var rabbitMq = Configuration.RabbitMqSettings;
+        
         ConnectionFactory factory = new();
-        factory.HostName = "localhost";
-        factory.Port = 5672;
-        factory.UserName = "guest";
-        factory.Password = "guest";
+        factory.HostName = rabbitMq.Host;
+        factory.Port = rabbitMq.Port;
+        factory.UserName = rabbitMq.UserName;
+        factory.Password = rabbitMq.Password;
 
         await using IConnection connection = await factory.CreateConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
