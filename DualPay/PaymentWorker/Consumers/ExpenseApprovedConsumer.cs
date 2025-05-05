@@ -52,7 +52,8 @@ public class ExpenseApprovedConsumer
                     ToAccount = expense.ToAccount,
                     FromAccount = expense.FromAccount,
                     Status = "Completed",
-                    CompletedAt = DateTime.UtcNow
+                    CompletedAt = DateTime.UtcNow,
+                    ExpenseId = expense.ExpenseId
                 };
 
                 var messageBody = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(paymentCompletedEvent));

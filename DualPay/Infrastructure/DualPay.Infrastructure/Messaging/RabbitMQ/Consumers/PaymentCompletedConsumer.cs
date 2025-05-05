@@ -1,6 +1,8 @@
 using System.Text;
 using DualPay.Application.Abstraction;
+using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Events;
+using DualPay.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -43,10 +45,17 @@ public class PaymentCompletedConsumer
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
                     var _userService = scope.ServiceProvider.GetRequiredService<IAppUserService>();
+                    var _expenseService = scope.ServiceProvider.GetRequiredService<IExpenseService>();
 
                     if (payment.Status == "Completed")
                     {
-                        await _userService.TransferBalanceAsync(payment.FromAccount, payment.ToAccount, payment.Amount);
+                        bool isPaid = await _userService.TransferBalanceAsync(payment.FromAccount, payment.ToAccount, payment.Amount);
+                        if (isPaid)
+                        {
+                            var expense = await _expenseService.GetByIdAsync(payment.ExpenseId);
+                            expense.Status= ExpenseStatus.Paid;
+                            await _expenseService.UpdateAsync(expense);
+                        }
                     }
                 }
             }

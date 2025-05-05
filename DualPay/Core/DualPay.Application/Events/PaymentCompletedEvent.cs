@@ -6,4 +6,5 @@ public class PaymentCompletedEvent
     public string FromAccount { get; set; }
     public string Status { get; set; }
     public DateTime CompletedAt { get; set; }
+    public int ExpenseId { get; set; }
 }
