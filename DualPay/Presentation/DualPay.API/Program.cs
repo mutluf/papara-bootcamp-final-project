@@ -4,6 +4,7 @@ using DualPay.API;
 using DualPay.Application;
 using DualPay.Infrastructure;
 using DualPay.Persistence;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -80,5 +81,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseHangfireDashboard();
 app.Run();

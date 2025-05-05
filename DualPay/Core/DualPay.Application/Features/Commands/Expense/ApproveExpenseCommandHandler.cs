@@ -13,15 +13,16 @@ public class ApproveExpenseCommandHandler : IRequestHandler<ApproveExpenseComman
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IExpenseService _expenseService;
-    private IEventPublishService _eventPublishService;
+    
     private readonly IEmployeeService _employeeService;
+    private readonly IJobService _jobService;
 
-    public ApproveExpenseCommandHandler(IExpenseService expenseService, IEventPublishService eventPublishService, IEmployeeService employeeService, UserManager<AppUser> userManager)
+    public ApproveExpenseCommandHandler(IExpenseService expenseService, IEmployeeService employeeService, UserManager<AppUser> userManager, IJobService jobService)
     {
         _expenseService = expenseService;
-        _eventPublishService = eventPublishService;
         _employeeService = employeeService;
         _userManager = userManager;
+        _jobService = jobService;
     }
 
     public async Task<ApiResponse> Handle(ApproveExpenseCommandRequest request, CancellationToken cancellationToken)
@@ -46,8 +47,10 @@ public class ApproveExpenseCommandHandler : IRequestHandler<ApproveExpenseComman
                 Amount = dto.Amount,
                 ToAccount = employee.AccountNumber,
                 FromAccount = fromAccount,
+                ExpenseId = request.ExpenseId,
             };
-            await _eventPublishService.PublishAsync(@event);
+            _jobService.ScheduleSendExpenseToPaymentAsync(@event, request.PaymentDate);
+            //await _eventPublishService.PublishAsync(@event);
         }
         return new ApiResponse(message: $"Expense with id {request.ExpenseId} approved.");
     }
@@ -56,4 +59,5 @@ public class ApproveExpenseCommandHandler : IRequestHandler<ApproveExpenseComman
 public class ApproveExpenseCommandRequest:IRequest<ApiResponse>
 {
     public int  ExpenseId { get; set; }
+    public DateTime PaymentDate { get; set; }
 }

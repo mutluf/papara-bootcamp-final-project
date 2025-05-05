@@ -2,9 +2,11 @@ using System.Data;
 using DualPay.Application.Abstraction;
 using DualPay.Domain.Entities.Identity;
 using DualPay.Infrastructure.Seeders;
+using DualPay.Persistence.Background;
 using DualPay.Persistence.Context;
 using DualPay.Persistence.Repositories;
 using DualPay.Persistence.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +21,7 @@ namespace DualPay.Persistence;
         services.AddDbContext<DualPayDbContext>(options => options.UseSqlServer(Configuration.ConnectionString));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IReportRepository,ReportRepository>();
+        services.AddScoped<IJobService,JobService>();
         
         services.AddIdentity<AppUser, AppRole>(options =>
         {
@@ -39,6 +42,10 @@ namespace DualPay.Persistence;
         {
             return new SqlConnection(Configuration.ConnectionString);
         });
+        
+        services.AddHangfire(config =>
+            config.UseSqlServerStorage(Configuration.ConnectionString));
+        services.AddHangfireServer();
     }
     
     public static async Task UseIdentitySeederAsync(this IApplicationBuilder app)

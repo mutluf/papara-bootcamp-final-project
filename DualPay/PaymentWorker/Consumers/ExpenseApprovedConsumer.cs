@@ -44,7 +44,7 @@ public class ExpenseApprovedConsumer
 
                 await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
                 
-                await Task.Delay(TimeSpan.FromSeconds(30));
+                await Task.Delay(TimeSpan.FromSeconds(10));
                 
                 var paymentCompletedEvent = new PaymentCompletedEvent
                 {
