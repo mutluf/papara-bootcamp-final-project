@@ -30,7 +30,7 @@ public class EmployeeController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin,User")]
-    [AuthorizeOwnEmployee]
+    [AuthorizeEmployeeForOwnExpense]
     public async Task<IActionResult> GetById([FromRoute] GetEmployeeByIdRequest request, [FromRoute] int id)
     {
         request.Id = id;

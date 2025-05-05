@@ -1,5 +1,4 @@
 using DualPay.API.Attributes;
-using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Features.Queries.Report;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +25,7 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet("employee-expenses/{EmployeeId}")]
-    [AuthorizeOwnEmployee]
+    [AuthorizeEmployee]
     public async Task<IActionResult> GetEmployeeExpenses([FromRoute] GetEmployeeExpenseReportQueryRequest request)
     {
         var response = await _mediator.Send(request);

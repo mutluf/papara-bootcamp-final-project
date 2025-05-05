@@ -32,7 +32,7 @@ public class ExpenseController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin,User")]
-    [AuthorizeOwnEmployee]
+    [AuthorizeEmployeeForOwnExpense]
     public async Task<IActionResult> GetById([FromRoute] GetExpenseByIdRequest  request, [FromRoute] int id)
     {
         request.Id = id;
