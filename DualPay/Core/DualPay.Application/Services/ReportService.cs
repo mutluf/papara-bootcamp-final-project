@@ -11,9 +11,24 @@ public class ReportService : IReportService
     {
         _reportRepository = reportRepository;
     }
-
-    public async Task<List<DailyExpenseReportDto>> GetDailyReportAsync()
+    
+    public async Task<List<PaymentReportDto>> GetPaymentsReportAsync(DateTime startDate, DateTime endDate)
     {
-        return await _reportRepository.GetDailyExpenseReportAsync();
+        return await _reportRepository.GetPaymentsReportAsync(startDate, endDate);
+    }
+
+    public async Task<List<EmployeeSpendingReportDto>> GetEmployeeSpendingsReportAsync(DateTime startDate, DateTime endDate)
+    {
+        return await _reportRepository.GetEmployeeSpendingsReportAsync(startDate, endDate);
+    }
+
+    public async Task<List<CategoryExpenseReportDto>> GetCategoryExpenseReportAsync(DateTime startDate, DateTime endDate)
+    {
+        return await _reportRepository.GetCategoryExpenseReportAsync(startDate, endDate);
+    }
+
+    public async Task<List<EmployeeExpenseReportDto>> GetEmployeeExpenseHistoryReportAsync(int employeeId)
+    {
+        return await _reportRepository.GetEmployeeExpenseHistoryReportAsync(employeeId);
     }
 }

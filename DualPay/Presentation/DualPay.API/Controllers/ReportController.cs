@@ -1,4 +1,8 @@
+using DualPay.API.Attributes;
 using DualPay.Application.Abstraction.Services;
+using DualPay.Application.Features.Queries.Report;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DualPay.API.Controllers;
@@ -6,17 +10,43 @@ namespace DualPay.API.Controllers;
 [Route("api/reports")]
 public class ReportController : ControllerBase
 {
-    private readonly IReportService _reportService;
-    
-    public ReportController(IReportService reportService)
+    private readonly IMediator _mediator;
+
+    public ReportController(IMediator mediator)
     {
-        _reportService = reportService;
+        _mediator = mediator;
     }
-    
-    [HttpGet("daily-expense")]
-    public async Task<IActionResult> GetDailyReport()
+
+    [HttpGet("payment-summary")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetPaymentSummary([FromQuery] GetPaymentsReportQueryRequest request)
     {
-        var result = await _reportService.GetDailyReportAsync();
-        return Ok(result);
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpGet("employee-expenses/{EmployeeId}")]
+    [AuthorizeOwnEmployee]
+    public async Task<IActionResult> GetEmployeeExpenses([FromRoute] GetEmployeeExpenseReportQueryRequest request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    [HttpGet("employee-spending-summary")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetEmployeeSpendingSummary([FromQuery]GetEmployeeSpendingReportQueryRequest request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    
+    [HttpGet("category-expense-report")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetCategoryExpenseReport([FromQuery] GetPaymentsReportQueryRequest request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
 }
