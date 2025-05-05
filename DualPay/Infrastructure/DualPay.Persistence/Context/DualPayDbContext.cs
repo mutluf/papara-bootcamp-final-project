@@ -16,8 +16,6 @@ public class DualPayDbContext : IdentityDbContext<AppUser, AppRole, int>
     public DbSet<Expense> Expenses { get; set; }
     public DbSet<ExpenseCategory> ExpenseCategories { get; set; }
     public DbSet<Employee> Employees { get; set; }
-    public DbSet<Payment> Payments { get; set; }
-    public DbSet<PaymentMethod> PaymentMethods { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Expense).Assembly);

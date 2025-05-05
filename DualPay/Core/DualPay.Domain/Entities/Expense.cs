@@ -13,16 +13,12 @@ public class Expense : BaseEntity
     public ExpenseStatus Status { get; set; } = ExpenseStatus.Pending;
     public string? DocumentUrl { get; set; }
     public string Location { get; set; }
-
-    public virtual Payment? Payment { get; set; }
-    
     public AppUser? AppUser { get; set; }
     public Employee? Employee { get; set; }
-    
     public int ? EmployeeId { get; set; }
-    
     public DateTime? ApprovedDate { get; set; }
     public DateTime? RejectedDate { get; set; }
+    public DateTime? PaymentDate { get; set; }
     public string? ApprovedBy { get; set; }
     public string? RejectedBy { get; set; }
     public string? RejectionReason { get; set; }
@@ -38,6 +34,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
         builder.Property(x => x.CreatedAt).IsRequired();
         builder.Property(x => x.UpdatedAt).IsRequired();
         builder.Property(x => x.ApprovedDate);
+        builder.Property(x => x.PaymentDate);
         builder.Property(x => x.ApprovedBy);
         builder.Property(x => x.RejectedDate);
         builder.Property(x => x.RejectedBy);
@@ -65,8 +62,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
             .WithMany(
                 )
             .IsRequired(false).OnDelete(DeleteBehavior.Restrict);
-        
-        builder.Ignore(x=> x.Payment);
+
         builder.Ignore(x=> x.AppUser);
     }
 }

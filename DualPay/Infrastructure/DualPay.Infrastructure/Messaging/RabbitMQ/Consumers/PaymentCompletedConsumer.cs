@@ -54,6 +54,7 @@ public class PaymentCompletedConsumer
                         {
                             var expense = await _expenseService.GetByIdAsync(payment.ExpenseId);
                             expense.Status= ExpenseStatus.Paid;
+                            expense.PaymentDate = DateTime.Now;
                             await _expenseService.UpdateAsync(expense);
                         }
                     }

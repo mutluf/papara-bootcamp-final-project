@@ -39,6 +39,7 @@ public class ExpenseDetailResponse
     public ExpenseStatus Status { get; set; }
     public string? DocumentUrl { get; set; }
     public string Location { get; set; }
+    public DateTime? PaymentDate { get; set; }
     public DateTime? ApprovedDate { get; set; }
     public DateTime? RejectedDate { get; set; }
     public string? ApprovedBy { get; set; }
