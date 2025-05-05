@@ -25,6 +25,7 @@ public class DeleteEmployeeCommandHandler:IRequestHandler<DeleteEmployeeCommandR
         }
         await _employeeService.DeleteByIdAsync(request.Id);
         apiResponse.Message = "Delete employee success";
+        apiResponse.Success = true;
         return apiResponse;
     }
 }

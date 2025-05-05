@@ -25,6 +25,7 @@ public class DeleteExpenseCategoryCommandHandler:IRequestHandler<DeleteExpenseCa
         }
         _expenseCategoryService.DeleteByIdAsync(request.Id);
         apiResponse.Message = "Delete Expense Category Success";
+        apiResponse.Success = true;
         return apiResponse;
     }
 }

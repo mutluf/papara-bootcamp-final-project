@@ -100,11 +100,13 @@ public class EmployeeService : IEmployeeService
     public async Task UpdateAsync(EmployeeDto employeeDto)
     {
         Employee employee = _mapper.Map<Employee>(employeeDto);
-        _employeeRepository.Update(employee);
+        _unitOfWork.GetRepository<Employee>().Update(employee);
+        await _unitOfWork.Complete();
     }
     
     public async Task DeleteByIdAsync(int id)
     {
-        await _employeeRepository.DeleteByIdAsync(id);
+        await _unitOfWork.GetRepository<Employee>().DeleteByIdAsync(id);
+        await _unitOfWork.Complete();
     }
 }

@@ -43,7 +43,7 @@ public class ReportController : ControllerBase
     
     [HttpGet("category-expense-report")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetCategoryExpenseReport([FromQuery] GetPaymentsReportQueryRequest request)
+    public async Task<IActionResult> GetCategoryExpenseReport([FromQuery] GetCategoryExpenseReportQueryRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);

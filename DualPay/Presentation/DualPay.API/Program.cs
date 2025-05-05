@@ -4,8 +4,10 @@ using DualPay.API;
 using DualPay.Application;
 using DualPay.Infrastructure;
 using DualPay.Persistence;
+using DualPay.Persistence.Context;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -19,7 +21,7 @@ builder.Services.AddControllers()  .AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "OTS Api Management", Version = "v1.0" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DualPay Api Management", Version = "v1.0" });
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Expense for IT Company",
@@ -40,6 +42,7 @@ builder.Services.AddSwaggerGen(c =>
         { securityScheme, new string[] { } }
     });
 });
+
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
@@ -51,7 +54,7 @@ builder.Services.AddAuthentication(x =>
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateAudience = true,
         ValidateIssuer = true,
@@ -66,7 +69,11 @@ builder.Services.AddAuthentication(x =>
 });
 
 var app = builder.Build();
-
+// using (var scope = app.Services.CreateScope())
+// {
+//     var db = scope.ServiceProvider.GetRequiredService<DualPayDbContext>();
+//     await db.Database.MigrateAsync();
+// }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

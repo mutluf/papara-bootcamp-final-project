@@ -20,7 +20,7 @@ public class GetCategoryExpenseReportHandler:IRequestHandler<GetCategoryExpenseR
     }
     public async Task<ApiResponse<List<GetCategoryExpenseReportQueryResponse>>> Handle(GetCategoryExpenseReportQueryRequest request, CancellationToken cancellationToken)
     {
-        var cacheKey = $"PaymentReports_{request.StartDate:yyyyMMdd}_{request.EndDate:yyyyMMdd}";
+        var cacheKey = $"CategoryExpenseReports_{request.StartDate:yyyyMMdd}_{request.EndDate:yyyyMMdd}";
         var cached = await _cacheService.GetAsync<List<GetCategoryExpenseReportQueryResponse>>(cacheKey);
         if (cached is not null)
             return new ApiResponse<List<GetCategoryExpenseReportQueryResponse>>(cached);

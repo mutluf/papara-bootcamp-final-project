@@ -22,7 +22,7 @@ public class UpdateExpenseCategoryCommandHandler: IRequestHandler<UpdateExpenseC
         expenseCategoryDto.Description = request.Description ?? expenseCategoryDto.Description;
         expenseCategoryDto.Name = request.Name ?? expenseCategoryDto.Name;
         await _expenseCategoryService.UpdateAsync(expenseCategoryDto);
-        return new ApiResponse();
+        return new ApiResponse{Message = "Expense category updated",Success = true};
     }
 }
 

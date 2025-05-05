@@ -22,9 +22,9 @@ public class UpdateExpenseCommandHandler: IRequestHandler<UpdateExpenseCommandRe
         if (dto == null)
             return new ApiResponse("Expense not found");
 
-        ExpenseDto expenseDto = _mapper.Map<ExpenseDto>(request);
-        _expenseService.UpdateAsync(expenseDto);
-        return new ApiResponse();
+        ExpenseDto expenseDto = _mapper.Map(request, dto); 
+        await _expenseService.UpdateAsync(expenseDto);
+        return new ApiResponse(message: "Expense updated");
     }
 }
 

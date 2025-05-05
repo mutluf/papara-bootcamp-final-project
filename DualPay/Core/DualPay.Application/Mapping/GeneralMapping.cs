@@ -13,15 +13,18 @@ public class GeneralMapping :Profile
     public GeneralMapping()
     {
         CreateMap<CreateExpenseCategoryCommandRequest, ExpenseCategoryDto>();
+        CreateMap<UpdateExpenseCategoryCommandRequest, ExpenseCategoryDto>();
         CreateMap<ExpenseCategoryDto, ExpenseCategoryResponse>();
         CreateMap<ExpenseCategoryDto, ExpenseCategory>().ReverseMap();
         
         CreateMap<CreateExpenseCommandRequest, ExpenseDto>();
+        CreateMap<UpdateExpenseCommandRequest, ExpenseDto>();
         CreateMap<ExpenseDto, ExpenseResponse>().ReverseMap();
         CreateMap<ExpenseDto, ExpenseDetailResponse>();
         CreateMap<ExpenseDto, Expense>().ReverseMap();
         
         CreateMap<CreateEmployeeCommandRequest, EmployeeDto>();
+        CreateMap<UpdateEmployeeCommandRequest, EmployeeDto>();
         CreateMap<EmployeeDto, EmployeeResponse>();
         CreateMap<EmployeeDto, EmployeeDetailResponse>();
         CreateMap<EmployeeDto, Employee>();

@@ -1,4 +1,5 @@
 using AutoMapper;
+using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
 using DualPay.Application.Features.Queries;
@@ -13,16 +14,19 @@ public class CreateEmployeeCommandHandler:IRequestHandler<CreateEmployeeCommandR
     private IEmployeeService _employeeService;
     private readonly IMapper _mapper;
     private readonly UserManager<AppUser> _userManager;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateEmployeeCommandHandler(IMapper mapper, UserManager<AppUser> userManager, IEmployeeService employeeService)
+    public CreateEmployeeCommandHandler(IMapper mapper, UserManager<AppUser> userManager, IEmployeeService employeeService, IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
         _userManager = userManager;
         _employeeService = employeeService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ApiResponse<EmployeeResponse>> Handle(CreateEmployeeCommandRequest request, CancellationToken cancellationToken)
     {
+        
         var user = new AppUser
         {
             Name = request.Name,
@@ -30,6 +34,8 @@ public class CreateEmployeeCommandHandler:IRequestHandler<CreateEmployeeCommandR
             Email = request.Email,
             EmailConfirmed = true,
             UserName = request.Name.ToLower() + "." + request.Name.ToLower(),
+            AccountNumber = request.AccountNumber,
+            Balance = 2000
         };
         try
         {
@@ -43,8 +49,9 @@ public class CreateEmployeeCommandHandler:IRequestHandler<CreateEmployeeCommandR
                     UserId = user.Id,
                     IdentityNumber = request.IdentityNumber,
                     PhoneNumber = request.PhoneNumber,
+                    AccountNumber = request.AccountNumber,
                 };
-               // await _employeeRepository.AddAsync(employee);
+                await _unitOfWork.GetRepository<Employee>().AddAsync(employee);
                 await _userManager.AddToRoleAsync(user, "USER");
 
                 // var entity = _mapper.Map<Employee>(request);
@@ -54,7 +61,7 @@ public class CreateEmployeeCommandHandler:IRequestHandler<CreateEmployeeCommandR
                 //var response = _mapper.Map<EmployeeResponse>(data);
                 //apiResponse.Data = response;
 
-               // await _unitOfWork.Complete();
+               await _unitOfWork.Complete();
             }
         }
         catch (Exception e)

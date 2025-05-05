@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using DualPay.API.Attributes;
 using DualPay.Application.Common.Models;
+using DualPay.Application.Features.Commands;
 using DualPay.Application.Features.Commands.Expense;
 using DualPay.Application.Features.Commands.ExpenseCategories;
 using DualPay.Application.Features.Queries;
@@ -69,7 +70,7 @@ public class ExpenseController : ControllerBase
     [UserExpenseAuthorization]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        DeleteExpenseCategoryCommandRequest request = new DeleteExpenseCategoryCommandRequest();
+        DeleteExpenseCommandRequest request = new DeleteExpenseCommandRequest();
         request.Id = id;
         ApiResponse apiResponse = await _mediator.Send(request);
         return Ok(apiResponse);

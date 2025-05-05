@@ -9,11 +9,6 @@ public class UpdateEmployeeValidator: AbstractValidator<UpdateEmployeeCommandReq
         RuleFor(x => x.Id)
             .GreaterThan(0).WithMessage("Id must be greater than 0.");
 
-        RuleFor(x => x.Email)
-            .MaximumLength(100).WithMessage("Email must be at most 100 characters.")
-            .EmailAddress().WithMessage("Invalid email format.")
-            .When(x => !string.IsNullOrWhiteSpace(x.Email));
-
         RuleFor(x => x.PhoneNumber)
             .Matches(@"^\d{10}$").WithMessage("Phone number must be exactly 10 digits.")
             .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber));
