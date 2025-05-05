@@ -31,7 +31,7 @@ public class GetEmployeeSpendingsQueryHandler
 
         List<EmployeeSpendingReportDto> reports = await _reportService.GetEmployeeSpendingsReportAsync(request.StartDate, request.EndDate);
         var responses = _mapper.Map<List<GetEmployeeSpendingReportQueryResponse>>(reports);
-        await _cacheService.SetAsync(cacheKey, responses, TimeSpan.FromHours(1));
+        await _cacheService.SetAsync(cacheKey, responses, TimeSpan.FromMinutes(15));
         
         return new ApiResponse<List<GetEmployeeSpendingReportQueryResponse>>(responses);
     }

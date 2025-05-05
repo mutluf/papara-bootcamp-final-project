@@ -27,7 +27,7 @@ public class GetPaymentsReportQueryHandler:IRequestHandler<GetPaymentsReportQuer
         
         List<PaymentReportDto> reports = await _reportService.GetPaymentsReportAsync(request.StartDate, request.EndDate);
         var responses = _mapper.Map<List<GetPaymentsReportQueryResponse>>(reports);
-        await _cacheService.SetAsync(cacheKey, responses, TimeSpan.FromHours(1));
+        await _cacheService.SetAsync(cacheKey, responses, TimeSpan.FromMinutes(15));
         
         return new ApiResponse<List<GetPaymentsReportQueryResponse>>(responses);
     }

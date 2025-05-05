@@ -22,8 +22,9 @@ public class EmployeeController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetAll([FromQuery] GetAllEmployeesQueryRequest request)
+    public async Task<IActionResult> GetAll()
     {
+        GetAllEmployeesQueryRequest request = new GetAllEmployeesQueryRequest();
         ApiResponse<List<EmployeeResponse>> result =await _mediator.Send(request);
         return Ok(result);
     }
@@ -31,8 +32,9 @@ public class EmployeeController : ControllerBase
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin,User")]
     [AuthorizeEmployeeForOwnExpense]
-    public async Task<IActionResult> GetById([FromRoute] GetEmployeeByIdRequest request, [FromRoute] int id)
+    public async Task<IActionResult> GetById([FromRoute] int id)
     {
+        GetEmployeeByIdRequest request = new GetEmployeeByIdRequest();
         request.Id = id;
         ApiResponse<EmployeeDetailResponse> result = await _mediator.Send(request);
         return Ok(result);
@@ -57,8 +59,9 @@ public class EmployeeController : ControllerBase
     
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Delete([FromRoute] DeleteEmployeeCommandRequest request, [FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
+        DeleteEmployeeCommandRequest request = new DeleteEmployeeCommandRequest();
         request.Id = id;
         ApiResponse apiResponse =await _mediator.Send(request);
         return Ok(apiResponse);

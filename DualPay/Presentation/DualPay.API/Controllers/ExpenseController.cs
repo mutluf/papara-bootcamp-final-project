@@ -24,8 +24,9 @@ public class ExpenseController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Admin,User")]
-    public async Task<IActionResult> GetAll([FromQuery] GetAllExpensesQueryRequest request)
+    public async Task<IActionResult> GetAll()
     {
+        GetAllExpensesQueryRequest request = new GetAllExpensesQueryRequest();
         ApiResponse<List<ExpenseResponse>> result = await _mediator.Send(request);
         return Ok(result);
     }
@@ -33,8 +34,9 @@ public class ExpenseController : ControllerBase
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin,User")]
     [AuthorizeEmployeeForOwnExpense]
-    public async Task<IActionResult> GetById([FromRoute] GetExpenseByIdRequest  request, [FromRoute] int id)
+    public async Task<IActionResult> GetById([FromRoute] int id)
     {
+        GetExpenseByIdRequest request = new GetExpenseByIdRequest();
         request.Id = id;
         ApiResponse<ExpenseDetailResponse> result = await _mediator.Send(request);
         return Ok(result);
@@ -65,8 +67,9 @@ public class ExpenseController : ControllerBase
     
     [HttpDelete("{id}")]
     [UserExpenseAuthorization]
-    public async Task<IActionResult> Delete([FromRoute] DeleteExpenseCategoryCommandRequest request, [FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
+        DeleteExpenseCategoryCommandRequest request = new DeleteExpenseCategoryCommandRequest();
         request.Id = id;
         ApiResponse apiResponse = await _mediator.Send(request);
         return Ok(apiResponse);

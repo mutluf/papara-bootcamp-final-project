@@ -27,7 +27,7 @@ public class GetCategoryExpenseReportHandler:IRequestHandler<GetCategoryExpenseR
         
         List<CategoryExpenseReportDto> reports = await _reportService.GetCategoryExpenseReportAsync(request.StartDate, request.EndDate);
         var responses = _mapper.Map<List<GetCategoryExpenseReportQueryResponse>>(reports);
-        await _cacheService.SetAsync(cacheKey, responses, TimeSpan.FromHours(1));
+        await _cacheService.SetAsync(cacheKey, responses, TimeSpan.FromMinutes(15));
         
         return new ApiResponse<List<GetCategoryExpenseReportQueryResponse>>(responses);
     }
