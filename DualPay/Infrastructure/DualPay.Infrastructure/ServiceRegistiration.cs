@@ -1,5 +1,6 @@
 using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Token;
+using DualPay.Infrastructure.Caching;
 using DualPay.Infrastructure.Messaging;
 using DualPay.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,5 +14,12 @@ public static class ServiceRegistiration
         services.AddHostedService<WorkerService>();
         services.AddScoped(typeof(ITokenHandler), typeof(TokenHandler));
         services.AddScoped(typeof(IEventPublishService), typeof(RabbitMqPublishService));
+        
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = "localhost:6379";
+            options.InstanceName = "Reports_";
+        });
+        services.AddScoped(typeof(ICacheService), typeof(RedisCacheService));
     }
 }

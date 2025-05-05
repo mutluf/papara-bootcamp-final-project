@@ -1,4 +1,5 @@
 using AutoMapper;
+using DualPay.Application.Abstraction;
 using DualPay.Application.Abstraction.Services;
 using DualPay.Application.Common.Models;
 using DualPay.Application.DTOs.Reports;
@@ -10,16 +11,23 @@ public class GetPaymentsReportQueryHandler:IRequestHandler<GetPaymentsReportQuer
 {
     private readonly IReportService _reportService;
     private readonly IMapper _mapper;
-    
-    public GetPaymentsReportQueryHandler(IReportService reportService, IMapper mapper)
+    private readonly ICacheService _cacheService;
+    public GetPaymentsReportQueryHandler(IReportService reportService, IMapper mapper, ICacheService cacheService)
     {
         _reportService = reportService;
         _mapper = mapper;
+        _cacheService = cacheService;
     }
     public async Task<ApiResponse<List<GetPaymentsReportQueryResponse>>> Handle(GetPaymentsReportQueryRequest request, CancellationToken cancellationToken)
     {
+        var cacheKey = $"PaymentReports_{request.StartDate:yyyyMMdd}_{request.EndDate:yyyyMMdd}";
+        var cached = await _cacheService.GetAsync<List<GetPaymentsReportQueryResponse>>(cacheKey);
+        if (cached is not null)
+            return new ApiResponse<List<GetPaymentsReportQueryResponse>>(cached);
+        
         List<PaymentReportDto> reports = await _reportService.GetPaymentsReportAsync(request.StartDate, request.EndDate);
         var responses = _mapper.Map<List<GetPaymentsReportQueryResponse>>(reports);
+        await _cacheService.SetAsync(cacheKey, responses, TimeSpan.FromHours(1));
         
         return new ApiResponse<List<GetPaymentsReportQueryResponse>>(responses);
     }
