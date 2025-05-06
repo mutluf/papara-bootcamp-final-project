@@ -20,6 +20,9 @@ public class EmployeeController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpGet]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll()
@@ -29,6 +32,9 @@ public class EmployeeController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// [USER ONLY FOR OWN DATA AND ADMIN]
+    /// </summary>
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin,User")]
     [AuthorizeEmployeeForOwnExpense]
@@ -40,6 +46,9 @@ public class EmployeeController : ControllerBase
         return Ok(result);
     }
     
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpPost]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CreateEmployeeCommandRequest request)
@@ -48,6 +57,9 @@ public class EmployeeController : ControllerBase
         return Ok(apiResponse);
     }
     
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update([FromBody] UpdateEmployeeCommandRequest request,  [FromRoute] int id)
@@ -57,6 +69,9 @@ public class EmployeeController : ControllerBase
         return Ok(apiResponse);
     }
     
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete([FromRoute] int id)

@@ -32,6 +32,10 @@ public class ApproveExpenseCommandHandler : IRequestHandler<ApproveExpenseComman
         {
             return new ApiResponse(message: $"Expense with id {request.ExpenseId} does not exist");
         }
+        if (dto.Status != ExpenseStatus.InProgress)
+        {
+            return new ApiResponse(message: $"Only 'InProgress' status can be approved");
+        }
               
         dto.Status = ExpenseStatus.Approved;
         dto.ApprovedDate = DateTime.UtcNow;
@@ -50,7 +54,6 @@ public class ApproveExpenseCommandHandler : IRequestHandler<ApproveExpenseComman
                 ExpenseId = request.ExpenseId,
             };
             _jobService.ScheduleSendExpenseToPaymentAsync(@event, request.PaymentDate);
-            //await _eventPublishService.PublishAsync(@event);
         }
         return new ApiResponse(message: $"Expense with id {request.ExpenseId} approved.");
     }

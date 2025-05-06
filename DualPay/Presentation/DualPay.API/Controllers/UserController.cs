@@ -24,8 +24,21 @@ public class UserController : ControllerBase
         return Ok();
     }
     
+    /// <summary>
+    /// INITIAL ADMIN LOGIN
+    /// {
+    ///        "usernameOrEmail": "dpadmin@dualpay.com.tr",
+    ///         "password": "DP2025!"
+    /// }
+    ///
+    /// INITIAL PERSONNEL LOGIN
+    ///  {
+    ///  "usernameOrEmail": "dpuser@dualpay.com.tr",
+    /// "password": "DP2025!"
+    /// }
+    /// </summary>
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginAppUserRequest request)
+    public async Task<IActionResult> Login([FromBody]LoginAppUserRequest request)
     {
         Token token = await _appUserService.LoginUserAsync(request);
         return Ok(token);

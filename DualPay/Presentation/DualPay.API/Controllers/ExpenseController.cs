@@ -23,15 +23,25 @@ public class ExpenseController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Admin can see all expenses(except Pending Status), User can see own expenses 
+    /// </summary>
     [HttpGet]
     [Authorize(Roles = "Admin,User")]
     public async Task<IActionResult> GetAll()
     {
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        bool isAdmin = User.IsInRole("Admin");
+        
         GetAllExpensesQueryRequest request = new GetAllExpensesQueryRequest();
+        request.UserId =  isAdmin ? null : userId;
         ApiResponse<List<ExpenseResponse>> result = await _mediator.Send(request);
         return Ok(result);
     }
-
+    
+    /// <summary>
+    /// [USER ONLY FOR OWN EXPENSE AND ADMIN]
+    /// </summary>
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin,User")]
     [AuthorizeEmployeeForOwnExpense]
@@ -43,6 +53,9 @@ public class ExpenseController : ControllerBase
         return Ok(result);
     }
     
+    /// <summary>
+    /// [USER ONLY]
+    /// </summary>
     [HttpPost]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> Create([FromBody] CreateExpenseCommandRequest request)
@@ -57,6 +70,9 @@ public class ExpenseController : ControllerBase
         return Ok(apiResponse);
     }
     
+    /// <summary>
+    /// [USER ONLY FOR OWN EXPENSE]
+    /// </summary>
     [HttpPut("{id}")]
     [UserExpenseAuthorization]
     public async Task<IActionResult> Update([FromBody] UpdateExpenseCommandRequest request,  [FromRoute] int id)
@@ -66,6 +82,9 @@ public class ExpenseController : ControllerBase
         return Ok(apiResponse);
     }
     
+    /// <summary>
+    /// [USER ONLY FOR OWN EXPENSE]
+    /// </summary>
     [HttpDelete("{id}")]
     [UserExpenseAuthorization]
     public async Task<IActionResult> Delete([FromRoute] int id)
@@ -76,6 +95,9 @@ public class ExpenseController : ControllerBase
         return Ok(apiResponse);
     }
     
+    /// <summary>
+    /// [USER ONLY FOR OWN EXPENSE] to send own expense for approval
+    /// </summary>
     [HttpPost("submit/{id}")]
     [UserExpenseAuthorization]
     public async Task<IActionResult> SendExpenseToApproval([FromBody] SendExpenseToApprovalCommandRequest request, [FromRoute] int id)
@@ -84,6 +106,10 @@ public class ExpenseController : ControllerBase
         ApiResponse response = await _mediator.Send(request);
         return Ok(response);
     }
+    
+    /// <summary>
+    /// [ADMIN ONLY] Provide Date and UTC hour to start payment process (Background job working)
+    /// </summary>
     [HttpPost("approve/{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ApproveExpenseAsync([FromBody] ApproveExpenseCommandRequest request, [FromRoute] int id)
@@ -93,6 +119,9 @@ public class ExpenseController : ControllerBase
         return Ok(response);
     }
     
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpPost("reject/{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> RejectExpenseAsync([FromBody] RejectExpenseCommandRequest request, [FromRoute] int id)
@@ -102,6 +131,9 @@ public class ExpenseController : ControllerBase
         return Ok(response);
     }
     
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpGet("filter")]
     public async Task<IActionResult> GetFilteredExpenses([FromQuery] string[] filters, [FromQuery] string[] includes)
     {

@@ -35,7 +35,9 @@ public class GetPaymentsReportQueryHandler:IRequestHandler<GetPaymentsReportQuer
 
 public class GetPaymentsReportQueryRequest : IRequest<ApiResponse<List<GetPaymentsReportQueryResponse>>>
 {
+    /// <example>2025-01-01</example>
     public DateTime StartDate { get; set; } 
+    /// <example>2025-01-10</example>
     public DateTime EndDate  { get; set; }
 }
 public class GetPaymentsReportQueryResponse

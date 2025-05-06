@@ -18,6 +18,9 @@ public class ExpenseCategoryController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -26,6 +29,9 @@ public class ExpenseCategoryController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
@@ -35,6 +41,9 @@ public class ExpenseCategoryController : ControllerBase
         return Ok(result);
     }
     
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpPost]
     public async Task<IActionResult> Create([FromBody]CreateExpenseCategoryCommandRequest request)
     {
@@ -42,6 +51,9 @@ public class ExpenseCategoryController : ControllerBase
         return Ok(apiResponse);
     }
     
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromBody] UpdateExpenseCategoryCommandRequest request, [FromRoute] int id)
     {
@@ -50,6 +62,9 @@ public class ExpenseCategoryController : ControllerBase
         return Ok(apiResponse);
     }
     
+    /// <summary>
+    /// [ADMIN ONLY]
+    /// </summary>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
