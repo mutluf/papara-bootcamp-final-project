@@ -30,6 +30,7 @@ This project is a modern backend application built with **.NET 8**, leveraging *
  ├── PaymentWorker                             # RabbitMQ - Messaging[Consumers, Publishers], Events
 
 ```
+
 ## 🧰 Prerequisites
 
 Before running the project, make sure the following are installed:
@@ -160,9 +161,31 @@ https://github.com/mutluf/papara-bootcamp-final-project/blob/main/dual-pay-store
   }
 }
 ```
+📎 File Upload Support
+The project supports file uploads (e.g., expense documents) via HTTP PUT requests. Below is how you can interact with this endpoint:
+
+🔧 Endpoint
+PUT /api/expenses/{id}/upload-expense
 
 
+📝 Content-Type
+multipart/form-data
 
+📥 Parameters
+Parameter	In	Type	Required	Description
+id	path	int	✅	Expense ID
+file	formData	file	✅	File to upload (e.g. PNG, PDF)
+
+🧪 Example (Swagger / Postman)
+Make sure to:
+
+Use multipart/form-data as the content type.
+
+Add a form field named file and attach the desired file.
+
+Set the id parameter in the path.
+
+-----------------
 ## ⚠️🚨 IMPORTANT: START BOTH PROJECTS! 🚨⚠️
 
 # ✅ YOU MUST RUN BOTH SERVICES FOR THE SYSTEM TO WORK PROPERLY:
