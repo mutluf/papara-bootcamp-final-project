@@ -46,7 +46,7 @@ public class ExpenseConfiguration : IEntityTypeConfiguration<Expense>
         builder.Property(x => x.Status).IsRequired()
             .HasConversion<string>() 
             .HasDefaultValue(ExpenseStatus.Pending);
-        builder.Property(x => x.DocumentUrl).IsRequired(false).HasMaxLength(100);
+        builder.Property(x => x.DocumentUrl).IsRequired(false).HasMaxLength(500);
         builder.Property(x => x.RejectionReason).HasMaxLength(100);
 
         builder.HasOne(x => x.ExpenseCategory)

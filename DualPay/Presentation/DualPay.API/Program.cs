@@ -37,6 +37,7 @@ builder.Services.AddSwaggerGen(c =>
             Type = ReferenceType.SecurityScheme
         }
     };
+    c.MapType<IFormFile>(() => new OpenApiSchema { Type = "string", Format = "binary" });
     c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {

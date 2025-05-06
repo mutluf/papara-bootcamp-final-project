@@ -39,7 +39,7 @@ public class CreateEmployeeCommandHandler:IRequestHandler<CreateEmployeeCommandR
         };
         try
         {
-            var result = await _userManager.CreateAsync(user, "123"); //need to hash
+            var result = await _userManager.CreateAsync(user, request.Password);
 
 
             if (result.Succeeded)
@@ -53,14 +53,6 @@ public class CreateEmployeeCommandHandler:IRequestHandler<CreateEmployeeCommandR
                 };
                 await _unitOfWork.GetRepository<Employee>().AddAsync(employee);
                 await _userManager.AddToRoleAsync(user, "USER");
-
-                // var entity = _mapper.Map<Employee>(request);
-                // entity.UserId = user.Id;
-                // var data = await _employeeRepository.AddAsync(entity);
-
-                //var response = _mapper.Map<EmployeeResponse>(data);
-                //apiResponse.Data = response;
-
                await _unitOfWork.Complete();
             }
         }
@@ -83,6 +75,7 @@ public class CreateEmployeeCommandRequest : IRequest<ApiResponse<EmployeeRespons
 {
     public string Name { get; set; }
     public string Surname { get; set; }
+    public string Password { get; set; } 
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public string AccountNumber { get; set; }
